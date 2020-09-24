@@ -1,12 +1,67 @@
 import React, { createContext, useReducer } from 'react';
 
-export const Context = createContext();
+const Context = createContext();
 
-export const layoutDefaultValues = {
+const ACTIONS = {
+  SET_BROWSER_SIZE: 'SET_BROWSER_SIZE',
+
+  SET_NAVBAR_OUTPUT: 'setNavBarOutPut',
+
+  SET_ACTIONBAR_OUTPUT: 'setActionBarOutput',
+
+  SET_SIDEBAR_NAVIGATION_IS_OPEN: 'setSideBarNavigationIsOpen',
+  SET_SIDEBAR_NAVIGATION_SIZE: 'setSideBarNavigationSize',
+  SET_SIDEBAR_NAVIGATION_OUTPUT: 'setSideBarNavigationOutPut',
+
+  SET_SIDEBAR_CONTENT_IS_OPEN: 'setSideBarContentIsOpen',
+  SET_SIDEBAR_CONTENT_SIZE: 'setSideBarContentSize',
+  SET_SIDEBAR_CONTENT_PANEL_TYPE: 'setSideBarContentPanelType',
+  SET_SIDEBAR_CONTENT_OUTPUT: 'setSideBarContentOutPut',
+
+  SET_NUM_CAMERAS: 'setNumCameras',
+  SET_CAMERA_DOCK_POSITION: 'setCameraDockPosition',
+  SET_CAMERA_DOCK_SIZE: 'setCameraDockSize',
+  SET_CAMERA_DOCK_OUTPUT: 'setCameraDockOutPut',
+
+  SET_PRESENTATION_IS_OPEN: 'setPresentationIsOpen',
+  SET_PRESENTATION_SLIDE_SIZE: 'setPresentationSlideSize',
+  SET_PRESENTATION_SIZE: 'setPresentationSize',
+  SET_PRESENTATION_OUTPUT: 'setPresentationOutPut',
+
+  SET_HAS_SCREEN_SHARE: 'setHasScreenShare',
+  SET_SCREEN_SHARE_SIZE: 'setScreenShareSize',
+
+  SET_HAS_EXTERNAL_VIDEO: 'setHasExternalVideo',
+  SET_EXTERNAL_VIDEO_SIZE: 'setExternalVideoSize',
+}
+
+const DEFAULT_VALUES = {
   panelType: 'chat',
+
   cameraPosition: 'top',
-  navBarHeight: 0,
-  actionBarHeight: 0
+  cameraDockTabOrder: 4,
+
+  presentationTabOrder: 5,
+
+  navBarHeight: 85,
+  navBarTop: 0,
+  navBarTabOrder: 3,
+
+  actionBarHeight: 65,
+  actionBarTabOrder: 6,
+
+  sideBarNavMaxWidth: 240,
+  sideBarNavMinWidth: 150,
+  sideBarNavHeight: '100vh',
+  sideBarNavTop: 0,
+  sideBarNavLeft: 0,
+  sideBarNavTabOrder: 1,
+
+  sideBarContentMaxWidth: 350,
+  sideBarContentMinWidth: 150,
+  sideBarContentHeight: '100vh',
+  sideBarContentTop: 0,
+  sideBarContentTabOrder: 2,
 }
 
 const state = {
@@ -19,10 +74,12 @@ const state = {
       height: 0
     },
     navBar: {
-      hasNavBar: true
+      hasNavBar: true,
+      height: DEFAULT_VALUES.navBarHeight,
     },
     actionBar: {
-      hasActionBar: true
+      hasActionBar: true,
+      height: DEFAULT_VALUES.actionBarHeight,
     },
     sideBarNavigation: {
       isOpen: true,
@@ -31,13 +88,13 @@ const state = {
     },
     sideBarContent: {
       isOpen: true,
-      currentPanelType: layoutDefaultValues.panelType,
+      currentPanelType: DEFAULT_VALUES.panelType,
       width: 0,
       browserWidth: 0
     },
     cameraDock: {
-      numCameras: 0,
-      position: layoutDefaultValues.cameraPosition,
+      numCameras: 1,
+      position: DEFAULT_VALUES.cameraPosition,
       width: 0,
       height: 0,
       browserWidth: 0,
@@ -100,6 +157,7 @@ const state = {
       height: 0,
       top: 0,
       left: 0,
+      currentPanelType: '',
       tabOrder: 0,
     },
     cameraDock: {
@@ -138,10 +196,11 @@ const state = {
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case 'setBrowserSize': {
+    case ACTIONS.SET_BROWSER_SIZE: {
       return {
         ...state,
         input: {
+          ...state.input,
           browser: {
             width: action.value.width,
             height: action.value.height,
@@ -149,49 +208,158 @@ const reducer = (state, action) => {
         }
       };
     }
-    case 'setSideBarNavigationIsOpen': {
+
+    case ACTIONS.SET_NAVBAR_OUTPUT: {
+      return {
+        ...state,
+        output: {
+          ...state.output,
+          navBar: {
+            display: action.value.display,
+            width: action.value.width,
+            height: action.value.height,
+            top: action.value.top,
+            left: action.value.left,
+            tabOrder: action.value.tabOrder
+          }
+        }
+      };
+    }
+
+    case ACTIONS.SET_ACTIONBAR_OUTPUT: {
+      return {
+        ...state,
+        output: {
+          ...state.output,
+          actionBar: {
+            display: action.value.display,
+            width: action.value.width,
+            height: action.value.height,
+            top: action.value.top,
+            left: action.value.left,
+            tabOrder: action.value.tabOrder
+          }
+        }
+      };
+    }
+
+    case ACTIONS.SET_SIDEBAR_NAVIGATION_IS_OPEN: {
       return {
         ...state,
         input: {
+          ...state.input,
           sideBarNavigation: {
+            ...state.sideBarNavigation,
             isOpen: action.value,
           }
         }
       };
     }
-    case 'setSideBarNavigationSize': {
+    case ACTIONS.SET_SIDEBAR_NAVIGATION_SIZE: {
       return {
         ...state,
         input: {
+          ...state.input,
           sideBarNavigation: {
+            ...state.sideBarNavigation,
             width: action.value.width,
             browserWidth: action.value.browserWidth,
           }
         }
       };
     }
-    case 'setNumCameras': {
+    case ACTIONS.SET_SIDEBAR_NAVIGATION_OUTPUT: {
       return {
+        ...state,
+        output: {
+          ...state.output,
+          sideBarNavigation: {
+            display: action.value.display,
+            width: action.value.width,
+            height: action.value.height,
+            top: action.value.top,
+            left: action.value.left,
+            tabOrder: action.value.tabOrder
+          }
+        }
+      };
+    }
+
+
+    case ACTIONS.SET_SIDEBAR_CONTENT_IS_OPEN: {
+      return {
+        ...state,
         input: {
+          ...state.input,
+          sideBarContent: {
+            ...state.sideBarContent,
+            isOpen: action.value,
+          }
+        }
+      };
+    }
+    case ACTIONS.SET_SIDEBAR_CONTENT_SIZE: {
+      return {
+        ...state,
+        input: {
+          ...state.input,
+          sideBarContent: {
+            ...state.sideBarContent,
+            width: action.value.width,
+            browserWidth: action.value.browserWidth,
+          }
+        }
+      };
+    }
+    case ACTIONS.SET_SIDEBAR_CONTENT_OUTPUT: {
+      return {
+        ...state,
+        output: {
+          ...state.output,
+          sideBarContent: {
+            display: action.value.display,
+            width: action.value.width,
+            height: action.value.height,
+            top: action.value.top,
+            left: action.value.left,
+            currentPanelType: action.value.currentPanelType,
+            tabOrder: action.value.tabOrder
+          }
+        }
+      };
+    }
+
+    case ACTIONS.SET_NUM_CAMERAS: {
+      return {
+        ...state,
+        input: {
+          ...state.input,
           cameraDock: {
+            ...state.cameraDock,
             numCameras: action.value,
           }
         }
       };
     }
-    case 'setCameraDockPosition': {
+    case ACTIONS.SET_CAMERA_DOCK_POSITION: {
       return {
+        ...state,
         input: {
+          ...state.input,
           cameraDock: {
+            ...state.cameraDock,
             position: action.value,
           }
         }
       };
     }
-    case 'setCameraDockSize': {
+    case ACTIONS.SET_CAMERA_DOCK_SIZE: {
       return {
+        ...state,
         input: {
+          ...state.input,
           cameraDock: {
+            ...state.cameraDock,
             width: action.value.width,
             height: action.value.height,
             browserWidth: action.value.browserWidth,
@@ -200,20 +368,42 @@ const reducer = (state, action) => {
         }
       };
     }
-    case 'setPresentationIsOpen': {
+    case ACTIONS.SET_CAMERA_DOCK_OUTPUT: {
+      return {
+        ...state,
+        output: {
+          ...state.output,
+          cameraDock: {
+            display: action.value.display,
+            width: action.value.width,
+            height: action.value.height,
+            top: action.value.top,
+            left: action.value.left,
+            tabOrder: action.value.tabOrder,
+          }
+        }
+      };
+    }
+
+    case ACTIONS.SET_PRESENTATION_IS_OPEN: {
       return {
         ...state,
         input: {
+          ...state.input,
           presentation: {
+            ...state.presentation,
             isOpen: action.value,
           }
         }
       };
     }
-    case 'setPresentationSlideSize': {
+    case ACTIONS.SET_PRESENTATION_SLIDE_SIZE: {
       return {
+        ...state,
         input: {
+          ...state.input,
           presentation: {
+            ...state.presentation,
             slideSize: {
               width: action.value.width,
               height: action.value.height,
@@ -222,10 +412,13 @@ const reducer = (state, action) => {
         }
       };
     }
-    case 'setPresentationSize': {
+    case ACTIONS.SET_PRESENTATION_SIZE: {
       return {
+        ...state,
         input: {
+          ...state.input,
           presentation: {
+            ...state.presentation,
             width: action.value.width,
             height: action.value.height,
             browserWidth: action.value.browserWidth,
@@ -234,19 +427,42 @@ const reducer = (state, action) => {
         }
       };
     }
-    case 'setHasScreenShare': {
+    case ACTIONS.SET_PRESENTATION_OUTPUT: {
       return {
+        ...state,
+        output: {
+          ...state.output,
+          presentation: {
+            display: action.value.display,
+            width: action.value.width,
+            height: action.value.height,
+            top: action.value.top,
+            left: action.value.left,
+            tabOrder: action.value.tabOrder,
+          }
+        }
+      };
+    }
+
+    case ACTIONS.SET_HAS_SCREEN_SHARE: {
+      return {
+        ...state,
         input: {
+          ...state.input,
           screenShare: {
+            ...state.screenShare,
             hasScreenShare: action.value,
           }
         }
       };
     }
-    case 'setScreenShareSize': {
+    case ACTIONS.SET_SCREEN_SHARE_SIZE: {
       return {
+        ...state,
         input: {
+          ...state.input,
           screenShare: {
+            ...state.screenShare,
             width: action.value.width,
             height: action.value.height,
             browserWidth: action.value.browserWidth,
@@ -255,19 +471,26 @@ const reducer = (state, action) => {
         }
       };
     }
-    case 'setHasExternalVideo': {
+
+    case ACTIONS.SET_HAS_EXTERNAL_VIDEO: {
       return {
+        ...state,
         input: {
+          ...state.input,
           externalVideo: {
+            ...state.externalVideo,
             hasExternalVideo: action.value,
           }
         }
       };
     }
-    case 'setExternalVideoSize': {
+    case ACTIONS.SET_EXTERNAL_VIDEO_SIZE: {
       return {
+        ...state,
         input: {
+          ...state.input,
           externalVideo: {
+            ...state.externalVideo,
             width: action.value.width,
             height: action.value.height,
             browserWidth: action.value.browserWidth,
@@ -297,23 +520,19 @@ const ContextProvider = (props) => {
   )
 }
 
-const withProvider = Component => props => (
-  <ContextProvider {...props}>
-    <Component />
-  </ContextProvider>
-)
-
-const ContextConsumer = Component => props => (
-  <Context.Consumer>
-    {contexts => <Component {...props} {...contexts} />}
-  </Context.Consumer>
-);
-
-const withContextConsumer = Component => ContextConsumer(Component);
-const withContext = Component => withProvider(withContextConsumer(Component));
-
-export {
-  withProvider,
-  withContextConsumer,
-  withContext,
-};
+class LayoutContext {
+  static ACTIONS = ACTIONS;
+  static DEFAULT_VALUES = DEFAULT_VALUES;
+  static withProvider = Component => props => (
+    <ContextProvider {...props}>
+      <Component />
+    </ContextProvider>
+  );
+  static withConsumer = Component => props => (
+    <Context.Consumer>
+      {contexts => <Component {...props} {...contexts} />}
+    </Context.Consumer>
+  );
+}
+export default LayoutContext;
+// const withContext = Component => withProvider(withContextConsumer(Component));

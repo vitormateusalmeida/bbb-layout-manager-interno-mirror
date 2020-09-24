@@ -1,7 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import App from '../components/app/component';
+import LayoutContext from '../components/Layout/context';
 
-export default class Base extends Component {
+class Base extends Component {
   render() {
     return (
       <Fragment>
@@ -10,3 +11,5 @@ export default class Base extends Component {
     );
   }
 }
+
+export default LayoutContext.withProvider(Base);

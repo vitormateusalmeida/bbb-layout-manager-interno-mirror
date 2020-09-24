@@ -1,21 +1,23 @@
 import React, { Component, Fragment } from 'react';
-import NavBar from '../nav-bar/component';
-import SideBarNavigation from '../side-bar-navigation/component';
-import SideBarContent from '../side-bar-content/component';
-import CameraDock from '../camera-dock/component';
-import Presentation from '../presentation/component';
-import ActionBar from '../action-bar/component';
+import NavBarContainer from '../nav-bar/container';
+import SideBarNavigationContainer from '../side-bar-navigation/container';
+import SideBarContentContainer from '../side-bar-content/container';
+import CameraDockContainer from '../camera-dock/container';
+import PresentationContainer from '../presentation/container';
+import ActionBarContainer from '../action-bar/container';
+import LayoutManager from '../Layout/layout-manager/component'
 
 export default class App extends Component {
   render() {
     return (
       <Fragment>
-        <NavBar />
-        <SideBarNavigation />
-        <SideBarContent />
-        <CameraDock />
-        <Presentation />
-        <ActionBar />
+        <LayoutManager />
+        <NavBarContainer />
+        <SideBarNavigationContainer />
+        <SideBarContentContainer />
+        <CameraDockContainer />
+        <PresentationContainer />
+        <ActionBarContainer />
       </Fragment>
     );
   }
