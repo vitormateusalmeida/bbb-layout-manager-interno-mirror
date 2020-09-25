@@ -7,6 +7,8 @@ const SideBarNavigationContainer = props => {
   const { output } = contextState;
   const { sideBarNavigation } = output;
 
+  if (sideBarNavigation.width === 0) return null;
+
   return <SideBarNavigation {...sideBarNavigation} />
 }
 

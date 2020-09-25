@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import LayoutContext from '../context';
+import _ from 'lodash';
 
 const windowWidth = () => window.innerWidth;
 const windowHeight = () => window.innerHeight;
@@ -9,23 +10,34 @@ const max = (value1, value2) => (value1 >= value2 ? value1 : value2);
 const autoArrangeLayout = true;
 
 class LayoutManager extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
 
-    this.calculatesLayout = this.calculatesLayout.bind(this);
+    this.throttledCalculatesLayout = _.throttle(() => this.calculatesLayout(),
+      50, { 'trailing': true, 'leading': true });
   }
 
-  shouldComponentUpdate(nextProps){
+  shouldComponentUpdate(nextProps) {
     return this.props.contextState.input !== nextProps.contextState.input;
   }
 
   componentDidMount() {
     this.calculatesLayout();
-    window.addEventListener('resize', this.calculatesLayout);
+    const { ACTIONS } = LayoutContext;
+    const { contextDispatch } = this.props;
+    window.addEventListener('resize', () => {
+      contextDispatch({
+        type: ACTIONS.SET_BROWSER_SIZE,
+        value: {
+          width: window.innerWidth,
+          height: window.innerHeight,
+        }
+      });
+    });
   }
 
   componentDidUpdate() {
-    this.calculatesLayout();
+    this.throttledCalculatesLayout();
   }
 
   calculatesSideBarSize() {
@@ -37,8 +49,6 @@ class LayoutManager extends Component {
       sideBarContentMinWidth,
       sideBarContentMaxWidth,
     } = LayoutContext.DEFAULT_VALUES;
-
-    console.log('contextState', contextState);
 
     let sideBarNavigationSize;
     let sideBarContentSize;

@@ -7,8 +7,6 @@ const CameraDockContainer = props => {
   const { output } = contextState;
   const { cameraDock } = output;
 
-  console.log('CameraDockContainer cameraDock', cameraDock);
-
   return <SideBarNavigation {...cameraDock} />
 }
 
