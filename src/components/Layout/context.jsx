@@ -1,4 +1,5 @@
 import React, { createContext, useReducer } from 'react';
+import DEFAULT_VALUES from './layout-manager/defaultValues';
 
 const Context = createContext();
 
@@ -33,35 +34,6 @@ const ACTIONS = {
 
   SET_HAS_EXTERNAL_VIDEO: 'setHasExternalVideo',
   SET_EXTERNAL_VIDEO_SIZE: 'setExternalVideoSize',
-}
-
-const DEFAULT_VALUES = {
-  panelType: 'chat',
-
-  cameraPosition: 'top',
-  cameraDockTabOrder: 4,
-
-  presentationTabOrder: 5,
-
-  navBarHeight: 85,
-  navBarTop: 0,
-  navBarTabOrder: 3,
-
-  actionBarHeight: 65,
-  actionBarTabOrder: 6,
-
-  sideBarNavMaxWidth: 240,
-  sideBarNavMinWidth: 150,
-  sideBarNavHeight: '100vh',
-  sideBarNavTop: 0,
-  sideBarNavLeft: 0,
-  sideBarNavTabOrder: 1,
-
-  sideBarContentMaxWidth: 350,
-  sideBarContentMinWidth: 150,
-  sideBarContentHeight: '100vh',
-  sideBarContentTop: 0,
-  sideBarContentTabOrder: 2,
 }
 
 const state = {
@@ -249,7 +221,7 @@ const reducer = (state, action) => {
         input: {
           ...state.input,
           sideBarNavigation: {
-            ...state.sideBarNavigation,
+            ...state.input.sideBarNavigation,
             isOpen: action.value,
           }
         }
@@ -261,7 +233,7 @@ const reducer = (state, action) => {
         input: {
           ...state.input,
           sideBarNavigation: {
-            ...state.sideBarNavigation,
+            ...state.input.sideBarNavigation,
             width: action.value.width,
             browserWidth: action.value.browserWidth,
           }
@@ -292,7 +264,7 @@ const reducer = (state, action) => {
         input: {
           ...state.input,
           sideBarContent: {
-            ...state.sideBarContent,
+            ...state.input.sideBarContent,
             isOpen: action.value,
           }
         }
@@ -304,7 +276,7 @@ const reducer = (state, action) => {
         input: {
           ...state.input,
           sideBarContent: {
-            ...state.sideBarContent,
+            ...state.input.sideBarContent,
             width: action.value.width,
             browserWidth: action.value.browserWidth,
           }
@@ -335,7 +307,7 @@ const reducer = (state, action) => {
         input: {
           ...state.input,
           cameraDock: {
-            ...state.cameraDock,
+            ...state.input.cameraDock,
             numCameras: action.value,
           }
         }
@@ -347,7 +319,7 @@ const reducer = (state, action) => {
         input: {
           ...state.input,
           cameraDock: {
-            ...state.cameraDock,
+            ...state.input.cameraDock,
             position: action.value,
           }
         }
@@ -359,7 +331,7 @@ const reducer = (state, action) => {
         input: {
           ...state.input,
           cameraDock: {
-            ...state.cameraDock,
+            ...state.input.cameraDock,
             width: action.value.width,
             height: action.value.height,
             browserWidth: action.value.browserWidth,
@@ -391,7 +363,7 @@ const reducer = (state, action) => {
         input: {
           ...state.input,
           presentation: {
-            ...state.presentation,
+            ...state.input.presentation,
             isOpen: action.value,
           }
         }
@@ -403,7 +375,7 @@ const reducer = (state, action) => {
         input: {
           ...state.input,
           presentation: {
-            ...state.presentation,
+            ...state.input.presentation,
             slideSize: {
               width: action.value.width,
               height: action.value.height,
@@ -418,7 +390,7 @@ const reducer = (state, action) => {
         input: {
           ...state.input,
           presentation: {
-            ...state.presentation,
+            ...state.input.presentation,
             width: action.value.width,
             height: action.value.height,
             browserWidth: action.value.browserWidth,
@@ -450,7 +422,7 @@ const reducer = (state, action) => {
         input: {
           ...state.input,
           screenShare: {
-            ...state.screenShare,
+            ...state.input.screenShare,
             hasScreenShare: action.value,
           }
         }
@@ -462,7 +434,7 @@ const reducer = (state, action) => {
         input: {
           ...state.input,
           screenShare: {
-            ...state.screenShare,
+            ...state.input.screenShare,
             width: action.value.width,
             height: action.value.height,
             browserWidth: action.value.browserWidth,
@@ -478,7 +450,7 @@ const reducer = (state, action) => {
         input: {
           ...state.input,
           externalVideo: {
-            ...state.externalVideo,
+            ...state.input.externalVideo,
             hasExternalVideo: action.value,
           }
         }
@@ -490,7 +462,7 @@ const reducer = (state, action) => {
         input: {
           ...state.input,
           externalVideo: {
-            ...state.externalVideo,
+            ...state.input.externalVideo,
             width: action.value.width,
             height: action.value.height,
             browserWidth: action.value.browserWidth,
@@ -522,7 +494,6 @@ const ContextProvider = (props) => {
 
 class LayoutContext {
   static ACTIONS = ACTIONS;
-  static DEFAULT_VALUES = DEFAULT_VALUES;
   static withProvider = Component => props => (
     <ContextProvider {...props}>
       <Component />

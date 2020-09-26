@@ -2,8 +2,10 @@ import React, { PureComponent } from 'react';
 import styles from './styles.module.sass';
 import { Resizable } from 're-resizable';
 import LayoutContext from '../Layout/context';
+import DEFAULT_VALUES from '../Layout/layout-manager/defaultValues';
+import _ from 'lodash';
 
-export default class SideBarNavigation extends PureComponent {
+class SideBarNavigation extends PureComponent {
   constructor(props) {
     super(props);
 
@@ -11,10 +13,28 @@ export default class SideBarNavigation extends PureComponent {
       resizableWidth: props.width,
       resizableHeight: props.height,
     }
+
+    this.throttleResizableWidth = _.throttle(
+      (dWidth, dHeight) => this.setSideBarNavWidth(dWidth, dHeight),
+      100, { 'trailing': true, 'leading': true }
+    );
+  }
+
+  setSideBarNavWidth(dWidth, dHeight) {
+    const { resizableWidth } = this.state;
+    const { contextDispatch } = this.props;
+    const { ACTIONS } = LayoutContext;
+
+    contextDispatch({
+      type: ACTIONS.SET_SIDEBAR_NAVIGATION_SIZE,
+      value: {
+        width: resizableWidth + dWidth,
+        browserWidth: window.innerWidth,
+      }
+    });
   }
 
   render() {
-    const { DEFAULT_VALUES } = LayoutContext;
     const {
       display,
       top,
@@ -30,7 +50,11 @@ export default class SideBarNavigation extends PureComponent {
           width: resizableWidth,
           height: resizableHeight,
         }}
+        enable={{
+          right: true
+        }}
         handleWrapperClass="resizeWrapper"
+        onResize={(e, direction, ref, d) => this.throttleResizableWidth(d.width, d.height)}
         onResizeStop={(e, direction, ref, d) => {
           this.setState({
             resizableWidth: resizableWidth + d.width,
@@ -48,8 +72,10 @@ export default class SideBarNavigation extends PureComponent {
             width: '100%',
             height: '100%',
           }}
-        >...</div>
+        ></div>
       </Resizable>
     );
   }
 }
+
+export default LayoutContext.withConsumer(SideBarNavigation);

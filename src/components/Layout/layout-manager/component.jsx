@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import LayoutContext from '../context';
+import DEFAULT_VALUES from './defaultValues';
 import _ from 'lodash';
 
 const windowWidth = () => window.innerWidth;
@@ -48,12 +49,12 @@ class LayoutManager extends Component {
       sideBarNavMaxWidth,
       sideBarContentMinWidth,
       sideBarContentMaxWidth,
-    } = LayoutContext.DEFAULT_VALUES;
+    } = DEFAULT_VALUES;
 
     let sideBarNavigationSize;
     let sideBarContentSize;
     if (input.sideBarNavigation.isOpen) {
-      if (input.sideBarNavigation.width === 0 || autoArrangeLayout) {
+      if (input.sideBarNavigation.width === 0) {
         sideBarNavigationSize = {
           width: min(max((windowWidth() * 0.2), sideBarNavMinWidth), sideBarNavMaxWidth),
         }
@@ -64,7 +65,7 @@ class LayoutManager extends Component {
       }
     }
     if (input.sideBarContent.isOpen) {
-      if (input.sideBarContent.width === 0 || autoArrangeLayout) {
+      if (input.sideBarContent.width === 0) {
         sideBarContentSize = {
           width: min(max((windowWidth() * 0.2), sideBarContentMinWidth), sideBarContentMaxWidth),
         }
@@ -83,7 +84,6 @@ class LayoutManager extends Component {
   calculatesCameraDockSize(sideBarNavigationSize, sideBarContentSize) {
     const { contextState } = this.props;
     const { input } = contextState;
-    const { DEFAULT_VALUES } = LayoutContext;
     const mediaArea = windowHeight() - (DEFAULT_VALUES.navBarHeight + DEFAULT_VALUES.actionBarHeight);
     let cameraDockSize = {};
 
@@ -107,7 +107,6 @@ class LayoutManager extends Component {
   calculatesPresentationSize(sideBarNavigationSize, sideBarContentSize) {
     const { contextState } = this.props;
     const { input } = contextState;
-    const { DEFAULT_VALUES } = LayoutContext;
     const mediaArea = windowHeight() - (DEFAULT_VALUES.navBarHeight + DEFAULT_VALUES.actionBarHeight);
     let presentationSize = {};
 
@@ -130,7 +129,7 @@ class LayoutManager extends Component {
   calculatesLayout() {
     const { contextState, contextDispatch } = this.props;
     const { input } = contextState;
-    const { DEFAULT_VALUES, ACTIONS } = LayoutContext;
+    const { ACTIONS } = LayoutContext;
     const {
       sideBarNavigationSize,
       sideBarContentSize,
