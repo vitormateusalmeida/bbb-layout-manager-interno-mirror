@@ -136,6 +136,7 @@ const state = {
       display: false,
       width: 0,
       height: 0,
+      maxHeight: 0,
       top: 0,
       left: 0,
       tabOrder: 0
@@ -502,6 +503,11 @@ class LayoutContext {
   static withConsumer = Component => props => (
     <Context.Consumer>
       {contexts => <Component {...props} {...contexts} />}
+    </Context.Consumer>
+  );
+  static withConsumerDispatch = Component => props => (
+    <Context.Consumer>
+      {contexts => <Component {...props} contextDispatch={contexts.contextDispatch} />}
     </Context.Consumer>
   );
 }

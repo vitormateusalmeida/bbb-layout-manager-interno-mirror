@@ -1,13 +1,15 @@
 import React from 'react';
-import SideBarNavigation from './component';
+import CameraDock from './component';
 import LayoutContext from '../Layout/context';
 
 const CameraDockContainer = props => {
-  const { contextState } = props;
+  const { contextState, contextDispatch } = props;
   const { output } = contextState;
   const { cameraDock } = output;
 
-  return <SideBarNavigation {...cameraDock} />
+  if (cameraDock.width === 0) return null;
+
+  return <CameraDock {...cameraDock} contextDispatch={contextDispatch} />
 }
 
 export default LayoutContext.withConsumer(CameraDockContainer);

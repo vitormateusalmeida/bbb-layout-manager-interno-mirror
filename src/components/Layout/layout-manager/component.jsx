@@ -60,7 +60,7 @@ class LayoutManager extends Component {
         }
       } else {
         sideBarNavigationSize = {
-          width: input.sideBarNavigation.width,
+          width: min(max(input.sideBarNavigation.width, sideBarNavMinWidth), sideBarNavMaxWidth),
         }
       }
     }
@@ -71,10 +71,11 @@ class LayoutManager extends Component {
         }
       } else {
         sideBarContentSize = {
-          width: input.sideBarContent.width,
+          width: min(max(input.sideBarContent.width, sideBarContentMinWidth), sideBarContentMaxWidth),
         }
       }
     }
+
     return {
       sideBarNavigationSize,
       sideBarContentSize
@@ -84,43 +85,59 @@ class LayoutManager extends Component {
   calculatesCameraDockSize(sideBarNavigationSize, sideBarContentSize) {
     const { contextState } = this.props;
     const { input } = contextState;
-    const mediaArea = windowHeight() - (DEFAULT_VALUES.navBarHeight + DEFAULT_VALUES.actionBarHeight);
+    const mediaAreaHeight = windowHeight() - (DEFAULT_VALUES.navBarHeight + DEFAULT_VALUES.actionBarHeight);
     let cameraDockSize = {};
 
-    if (input.sideBarNavigation.isOpen && !input.sideBarContent.isOpen) {
-      cameraDockSize.width = windowWidth() - sideBarNavigationSize;
-    }
-    if (input.sideBarContent.isOpen && !input.sideBarNavigation.isOpen) {
-      cameraDockSize.width = windowWidth() - sideBarContentSize;
-    }
-    if (input.sideBarContent.isOpen && input.sideBarNavigation.isOpen) {
-      cameraDockSize.width = windowWidth() - (sideBarNavigationSize + sideBarContentSize);
+    if (input.cameraDock.numCameras > 0) {
+      if (input.sideBarNavigation.isOpen && !input.sideBarContent.isOpen) {
+        cameraDockSize.width = windowWidth() - sideBarNavigationSize;
+      }
+      if (input.sideBarContent.isOpen && !input.sideBarNavigation.isOpen) {
+        cameraDockSize.width = windowWidth() - sideBarContentSize;
+      }
+      if (input.sideBarContent.isOpen && input.sideBarNavigation.isOpen) {
+        cameraDockSize.width = windowWidth() - (sideBarNavigationSize + sideBarContentSize);
+      }
+  
+      if (input.cameraDock.height === 0){
+        if (input.presentation.isOpen) {
+          cameraDockSize.height = min(max((mediaAreaHeight * 0.2), DEFAULT_VALUES.cameraDockMinHeight), (mediaAreaHeight * 0.8));
+        } else {
+          cameraDockSize.height = mediaAreaHeight;
+        }
+      } else {
+        cameraDockSize.height = min(max(input.cameraDock.height, DEFAULT_VALUES.cameraDockMinHeight), (mediaAreaHeight * 0.8));
+      }
+    } else {
+      cameraDockSize.width = 0;
+      cameraDockSize.height = 0;
     }
 
-    if (autoArrangeLayout) {
-      cameraDockSize.height = min(max((mediaArea * 0.2), (mediaArea * 0.2)), (mediaArea * 0.8));
-    }
+    cameraDockSize.maxHeight = mediaAreaHeight * 0.8;
 
     return cameraDockSize;
   }
 
-  calculatesPresentationSize(sideBarNavigationSize, sideBarContentSize) {
+  calculatesPresentationSize(sideBarNavigationSize, sideBarContentSize, cameraDockSize) {
     const { contextState } = this.props;
     const { input } = contextState;
-    const mediaArea = windowHeight() - (DEFAULT_VALUES.navBarHeight + DEFAULT_VALUES.actionBarHeight);
+    const mediaAreaHeight = windowHeight() - (DEFAULT_VALUES.navBarHeight + DEFAULT_VALUES.actionBarHeight);
     let presentationSize = {};
 
     if (input.sideBarNavigation.isOpen && !input.sideBarContent.isOpen) {
-      presentationSize.width = windowWidth() - sideBarNavigationSize;
+      presentationSize.width = windowWidth() - sideBarNavigationSize.width;
     }
     if (input.sideBarContent.isOpen && !input.sideBarNavigation.isOpen) {
-      presentationSize.width = windowWidth() - sideBarContentSize;
+      presentationSize.width = windowWidth() - sideBarContentSize.width;
     }
     if (input.sideBarContent.isOpen && input.sideBarNavigation.isOpen) {
-      presentationSize.width = windowWidth() - (sideBarNavigationSize + sideBarContentSize);
+      presentationSize.width = windowWidth() - (sideBarNavigationSize.width + sideBarContentSize.width);
     }
-    if (autoArrangeLayout) {
-      presentationSize.height = min(max((mediaArea * 0.8), (mediaArea * 0.2)), (mediaArea * 0.8));
+    
+    if (input.cameraDock.numCameras > 0) {
+      presentationSize.height = min(max(mediaAreaHeight - cameraDockSize.height, DEFAULT_VALUES.presentationMinHeight), (mediaAreaHeight * 0.8));
+    } else {
+      presentationSize.height = mediaAreaHeight;
     }
 
     return presentationSize;
@@ -137,7 +154,8 @@ class LayoutManager extends Component {
     const cameraDockSize = this.calculatesCameraDockSize(
       sideBarNavigationSize.width, sideBarContentSize.width);
     const presentationSize = this.calculatesPresentationSize(
-      sideBarNavigationSize.width, sideBarContentSize.width);
+      sideBarNavigationSize, sideBarContentSize,
+      cameraDockSize);
 
     contextDispatch({
       type: ACTIONS.SET_NAVBAR_OUTPUT,
@@ -193,6 +211,7 @@ class LayoutManager extends Component {
       value: {
         display: input.cameraDock.numCameras > 0,
         width: cameraDockSize.width,
+        maxHeight: cameraDockSize.maxHeight,
         height: cameraDockSize.height,
         top: DEFAULT_VALUES.cameraPosition === 'top' ? DEFAULT_VALUES.navBarHeight : 0, // fazer função para calcular a posição
         left: sideBarNavigationSize.width + sideBarContentSize.width,

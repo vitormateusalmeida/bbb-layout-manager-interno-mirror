@@ -3,8 +3,10 @@ const DEFAULT_VALUES = {
 
   cameraPosition: 'top',
   cameraDockTabOrder: 4,
+  cameraDockMinHeight: 140,
 
   presentationTabOrder: 5,
+  presentationMinHeight: 140,
 
   navBarHeight: 85,
   navBarTop: 0,

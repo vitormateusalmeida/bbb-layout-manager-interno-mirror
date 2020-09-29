@@ -3,33 +3,39 @@ import styles from './styles.module.sass';
 import { Resizable } from 're-resizable';
 import LayoutContext from '../Layout/context';
 import DEFAULT_VALUES from '../Layout/layout-manager/defaultValues';
-import _ from 'lodash';
 
-class SideBarNavigation extends PureComponent {
+export default class SideBarNavigation extends PureComponent {
   constructor(props) {
     super(props);
 
     this.state = {
       resizableWidth: props.width,
       resizableHeight: props.height,
+      isResizing: false,
+      resizeStartWidth: 0,
     }
+  }
 
-    this.throttleResizableWidth = _.throttle(
-      (dWidth, dHeight) => this.setSideBarNavWidth(dWidth, dHeight),
-      100, { 'trailing': true, 'leading': true }
-    );
+  componentDidUpdate(prevProps) {
+    const {isResizing} = this.state;
+    if (prevProps.width !== this.props.width && !isResizing) {
+      this.setState({resizableWidth : this.props.width});
+    }
   }
 
   setSideBarNavWidth(dWidth, dHeight) {
-    const { resizableWidth } = this.state;
+    const { resizableWidth, resizeStartWidth } = this.state;
     const { contextDispatch } = this.props;
     const { ACTIONS } = LayoutContext;
+
+    this.setState({resizableWidth : resizeStartWidth + dWidth});
 
     contextDispatch({
       type: ACTIONS.SET_SIDEBAR_NAVIGATION_SIZE,
       value: {
-        width: resizableWidth + dWidth,
+        width: resizeStartWidth + dWidth,
         browserWidth: window.innerWidth,
+        browserHeight: window.innerHeight,
       }
     });
   }
@@ -53,21 +59,24 @@ class SideBarNavigation extends PureComponent {
         enable={{
           right: true
         }}
-        handleWrapperClass="resizeWrapper"
-        onResize={(e, direction, ref, d) => this.throttleResizableWidth(d.width, d.height)}
+        handleWrapperClass="resizeSideBarNavWrapper"
+        onResizeStart={() => {
+          this.setState({isResizing: true, resizeStartWidth: resizableWidth});
+        }}
+        onResize={(e, direction, ref, d) => this.setSideBarNavWidth(d.width, d.height)}
         onResizeStop={(e, direction, ref, d) => {
-          this.setState({
-            resizableWidth: resizableWidth + d.width,
-            resizableHeight: resizableHeight + d.height,
-          });
+          this.setState({isResizing:false, resizeStartWidth: 0});
+        }}
+        style={{
+          position: "absolute",
+          top,
+          left,
         }}
       >
         <div
           className={styles.sidebarNav}
           style={{
-            display,
-            top,
-            left,
+            display: !display ? 'none' : 'flex',
             background: 'blue',
             width: '100%',
             height: '100%',
@@ -77,5 +86,3 @@ class SideBarNavigation extends PureComponent {
     );
   }
 }
-
-export default LayoutContext.withConsumer(SideBarNavigation);
