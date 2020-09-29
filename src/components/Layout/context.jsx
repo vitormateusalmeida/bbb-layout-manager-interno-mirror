@@ -350,6 +350,7 @@ const reducer = (state, action) => {
             display: action.value.display,
             width: action.value.width,
             height: action.value.height,
+            maxHeight: action.value.maxHeight,
             top: action.value.top,
             left: action.value.left,
             tabOrder: action.value.tabOrder,

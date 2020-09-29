@@ -7,6 +7,8 @@ const PresentationContainer = props => {
   const { output } = contextState;
   const { presentation } = output;
 
+  if (presentation.width === 0) return null;
+
   return <Presentation {...presentation} />
 }
 

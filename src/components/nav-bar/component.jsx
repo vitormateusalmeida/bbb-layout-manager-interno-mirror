@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import styles from './styles.module.sass';
 
-export default class NavBar extends Component {
+export default class NavBar extends PureComponent {
   render() {
     const {
       display,

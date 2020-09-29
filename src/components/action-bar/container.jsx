@@ -7,6 +7,8 @@ const ActionBarContainer = props => {
   const { output } = contextState;
   const { actionBar } = output;
 
+  if (actionBar.width === 0) return null;
+
   return <ActionBar {...actionBar} />
 }
 

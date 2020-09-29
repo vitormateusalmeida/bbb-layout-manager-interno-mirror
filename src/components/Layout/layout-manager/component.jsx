@@ -101,19 +101,19 @@ class LayoutManager extends Component {
   
       if (input.cameraDock.height === 0){
         if (input.presentation.isOpen) {
-          cameraDockSize.height = min(max((mediaAreaHeight * 0.2), DEFAULT_VALUES.cameraDockMinHeight), (mediaAreaHeight * 0.8));
+          cameraDockSize.height = min(max((mediaAreaHeight * 0.2), DEFAULT_VALUES.cameraDockMinHeight), (mediaAreaHeight - DEFAULT_VALUES.cameraDockMinHeight));
         } else {
           cameraDockSize.height = mediaAreaHeight;
         }
       } else {
-        cameraDockSize.height = min(max(input.cameraDock.height, DEFAULT_VALUES.cameraDockMinHeight), (mediaAreaHeight * 0.8));
+        cameraDockSize.height = min(max(input.cameraDock.height, DEFAULT_VALUES.cameraDockMinHeight), (mediaAreaHeight - DEFAULT_VALUES.cameraDockMinHeight));
       }
     } else {
       cameraDockSize.width = 0;
       cameraDockSize.height = 0;
     }
 
-    cameraDockSize.maxHeight = mediaAreaHeight * 0.8;
+    cameraDockSize.maxHeight = mediaAreaHeight - DEFAULT_VALUES.cameraDockMinHeight;
 
     return cameraDockSize;
   }
@@ -135,7 +135,7 @@ class LayoutManager extends Component {
     }
     
     if (input.cameraDock.numCameras > 0) {
-      presentationSize.height = min(max(mediaAreaHeight - cameraDockSize.height, DEFAULT_VALUES.presentationMinHeight), (mediaAreaHeight * 0.8));
+      presentationSize.height = min(max(mediaAreaHeight - cameraDockSize.height, DEFAULT_VALUES.presentationMinHeight), (mediaAreaHeight - DEFAULT_VALUES.presentationMinHeight));
     } else {
       presentationSize.height = mediaAreaHeight;
     }

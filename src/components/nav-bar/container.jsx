@@ -7,6 +7,8 @@ const NavBarContainer = props => {
   const { output } = contextState;
   const { navBar } = output;
 
+  if (navBar.width === 0) return null;
+
   return <NavBar {...navBar} />
 }
 

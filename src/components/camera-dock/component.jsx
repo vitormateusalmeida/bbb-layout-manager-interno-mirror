@@ -9,8 +9,6 @@ export default class CameraDock extends PureComponent {
   constructor(props) {
     super(props);
 
-    console.log('props.height', props.height);
-
     this.state = {
       resizableWidth: props.width,
       resizableHeight: props.height,
@@ -21,8 +19,11 @@ export default class CameraDock extends PureComponent {
 
   componentDidUpdate(prevProps) {
     const {isResizing} = this.state;
-    if (prevProps.height !== this.props.height && !isResizing) {
-      this.setState({resizableHeight : this.props.height});
+    if (!isResizing && (prevProps.height !== this.props.height || prevProps.width !== this.props.width)) {
+      this.setState({
+        resizableWidth: this.props.width,
+        resizableHeight: this.props.height,
+      });
     }
   }
 

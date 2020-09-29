@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import styles from './styles.module.sass';
 
-export default class ActionBar extends Component {
+export default class ActionBar extends PureComponent {
   render() {
     const {
       display,
