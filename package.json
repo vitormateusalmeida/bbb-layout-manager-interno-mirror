@@ -11,6 +11,7 @@
     "re-resizable": "^6.6.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-draggable": "^4.4.3",
     "react-scripts": "3.4.3",
     "styled-components": "^5.2.0"
   },

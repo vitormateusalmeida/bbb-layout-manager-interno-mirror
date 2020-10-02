@@ -77,7 +77,6 @@ export default class SideBarNavigation extends PureComponent {
           className={styles.sidebarNav}
           style={{
             display: !display ? 'none' : 'flex',
-            background: 'blue',
             width: '100%',
             height: '100%',
           }}

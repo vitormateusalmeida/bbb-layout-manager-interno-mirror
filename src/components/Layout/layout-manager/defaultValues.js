@@ -17,7 +17,7 @@ const DEFAULT_VALUES = {
 
   sideBarNavMaxWidth: 240,
   sideBarNavMinWidth: 150,
-  sideBarNavHeight: '100vh',
+  sideBarNavHeight: '100%',
   sideBarNavTop: 0,
   sideBarNavLeft: 0,
   sideBarNavTabOrder: 1,

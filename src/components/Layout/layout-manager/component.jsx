@@ -3,8 +3,8 @@ import LayoutContext from '../context';
 import DEFAULT_VALUES from './defaultValues';
 import _ from 'lodash';
 
-const windowWidth = () => window.innerWidth;
-const windowHeight = () => window.innerHeight;
+const windowWidth = () => window.document.documentElement.clientWidth;
+const windowHeight = () => window.document.documentElement.clientHeight;
 const min = (value1, value2) => (value1 <= value2 ? value1 : value2);
 const max = (value1, value2) => (value1 >= value2 ? value1 : value2);
 
@@ -30,8 +30,8 @@ class LayoutManager extends Component {
       contextDispatch({
         type: ACTIONS.SET_BROWSER_SIZE,
         value: {
-          width: window.innerWidth,
-          height: window.innerHeight,
+          width: window.document.documentElement.clientWidth,
+          height: window.document.documentElement.clientHeight,
         }
       });
     });
