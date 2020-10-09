@@ -23,8 +23,7 @@ class DropZone extends PureComponent {
       height: (
         input.cameraDock.position === 'top'
           || input.cameraDock.position === 'bottom'
-          ? output.cameraDock.height
-          + output.presentation.height
+          ? output.presentation.height
           : output.presentation.height
       )
         - (2 * DROP_ZONE_DEFAUL_SIZE),
@@ -45,8 +44,7 @@ class DropZone extends PureComponent {
       height: (
         input.cameraDock.position === 'top'
           || input.cameraDock.position === 'bottom'
-          ? output.cameraDock.height
-          + output.presentation.height
+          ? output.presentation.height
           : output.presentation.height
       )
         - (2 * DROP_ZONE_DEFAUL_SIZE),
@@ -58,18 +56,12 @@ class DropZone extends PureComponent {
       left: output.sideBarNavigation.width
         + output.sideBarContent.width,
       width: output.cameraDock.width,
-      height: DROP_ZONE_DEFAUL_SIZE
+      height: DROP_ZONE_DEFAUL_SIZE,
     }
 
     dropZones.dropZoneBottom = {
       top: output.navBar.height
-        + (
-          input.cameraDock.position === 'top'
-            || input.cameraDock.position === 'bottom'
-            ? output.cameraDock.height
-            + output.presentation.height
-            : output.presentation.height
-        )
+        + output.presentation.height
         - DROP_ZONE_DEFAUL_SIZE,
       left: output.sideBarNavigation.width
         + output.sideBarContent.width,
@@ -97,20 +89,36 @@ class DropZone extends PureComponent {
           style={{ ...dropZones.dropZoneTop }}
         />
         <div
+          className={styles.dropZoneBgTop}
+          style={{ ...dropZones.dropZoneTop }}
+        >Drop Here</div>
+        <div
           id="dropZoneRight"
           className={styles.dropZoneRight}
           style={{ ...dropZones.dropZoneRight }}
         />
+        <div
+          className={styles.dropZoneBgRight}
+          style={{ ...dropZones.dropZoneRight }}
+        >Drop Here</div>
         <div
           id="dropZoneBottom"
           className={styles.dropZoneBottom}
           style={{ ...dropZones.dropZoneBottom }}
         />
         <div
+          className={styles.dropZoneBgBottom}
+          style={{ ...dropZones.dropZoneBottom }}
+        >Drop Here</div>
+        <div
           id="dropZoneLeft"
           className={styles.dropZoneLeft}
           style={{ ...dropZones.dropZoneLeft }}
         />
+        <div
+          className={styles.dropZoneBgLeft}
+          style={{ ...dropZones.dropZoneLeft }}
+        >Drop Here</div>
       </Fragment>
     );
   }

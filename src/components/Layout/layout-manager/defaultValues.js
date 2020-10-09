@@ -1,9 +1,10 @@
 const DEFAULT_VALUES = {
   panelType: 'chat',
 
-  cameraPosition: 'top',
+  cameraPosition: 'left',
   cameraDockTabOrder: 4,
   cameraDockMinHeight: 140,
+  cameraDockMinWidth: 140,
 
   presentationTabOrder: 5,
   presentationMinHeight: 140,

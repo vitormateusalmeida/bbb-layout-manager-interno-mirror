@@ -20,8 +20,9 @@ export default class Presentation extends PureComponent {
           height,
           top,
           left,
+          zIndex: 1,
         }}
-      />
+      >Presentation</div>
     );
   }
 }

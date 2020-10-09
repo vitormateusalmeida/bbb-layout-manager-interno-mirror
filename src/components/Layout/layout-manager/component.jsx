@@ -82,40 +82,86 @@ class LayoutManager extends Component {
     }
   }
 
-  calculatesCameraDockSize(sideBarNavigationSize, sideBarContentSize) {
+  calculatesCameraDockBounds(sideBarNavigationSize, sideBarContentSize) {
     const { contextState } = this.props;
     const { input } = contextState;
     const mediaAreaHeight = windowHeight() - (DEFAULT_VALUES.navBarHeight + DEFAULT_VALUES.actionBarHeight);
-    let cameraDockSize = {};
+    let mediaAreaWidth = 0;
+    if (input.sideBarNavigation.isOpen && !input.sideBarContent.isOpen)
+      mediaAreaWidth = windowWidth() - sideBarNavigationSize.width;
+    if (input.sideBarContent.isOpen && !input.sideBarNavigation.isOpen)
+      mediaAreaWidth = windowWidth() - sideBarContentSize.width;
+    if (input.sideBarContent.isOpen && input.sideBarNavigation.isOpen)
+      mediaAreaWidth = windowWidth() - (sideBarNavigationSize.width + sideBarContentSize.width);
+    let cameraDockBounds = {};
 
     if (input.cameraDock.numCameras > 0) {
-      if (input.sideBarNavigation.isOpen && !input.sideBarContent.isOpen) {
-        cameraDockSize.width = windowWidth() - sideBarNavigationSize;
-      }
-      if (input.sideBarContent.isOpen && !input.sideBarNavigation.isOpen) {
-        cameraDockSize.width = windowWidth() - sideBarContentSize;
-      }
-      if (input.sideBarContent.isOpen && input.sideBarNavigation.isOpen) {
-        cameraDockSize.width = windowWidth() - (sideBarNavigationSize + sideBarContentSize);
-      }
-  
-      if (input.cameraDock.height === 0){
-        if (input.presentation.isOpen) {
-          cameraDockSize.height = min(max((mediaAreaHeight * 0.2), DEFAULT_VALUES.cameraDockMinHeight), (mediaAreaHeight - DEFAULT_VALUES.cameraDockMinHeight));
-        } else {
-          cameraDockSize.height = mediaAreaHeight;
-        }
-      } else {
-        cameraDockSize.height = min(max(input.cameraDock.height, DEFAULT_VALUES.cameraDockMinHeight), (mediaAreaHeight - DEFAULT_VALUES.cameraDockMinHeight));
+      let cameraDockLeft = 0;
+      let cameraDockHeight = 0;
+      let cameraDockWidth = 0;
+      switch (input.cameraDock.position) {
+        case 'top':
+          console.log('position top');
+
+          if (sideBarNavigationSize.width > 0)
+            cameraDockLeft += sideBarNavigationSize.width;
+          if (sideBarContentSize.width > 0)
+            cameraDockLeft += sideBarContentSize.width;
+
+          if (input.cameraDock.height === 0) {
+            if (input.presentation.isOpen) {
+              cameraDockHeight = min(max((mediaAreaHeight * 0.2), DEFAULT_VALUES.cameraDockMinHeight), (mediaAreaHeight - DEFAULT_VALUES.cameraDockMinHeight));
+            } else {
+              cameraDockHeight = mediaAreaHeight;
+            }
+          } else {
+            cameraDockHeight = min(max(input.cameraDock.height, DEFAULT_VALUES.cameraDockMinHeight), (mediaAreaHeight - DEFAULT_VALUES.cameraDockMinHeight));
+          }
+
+          cameraDockBounds.top = DEFAULT_VALUES.navBarHeight
+          cameraDockBounds.left = cameraDockLeft;
+          cameraDockBounds.width = mediaAreaWidth;
+          cameraDockBounds.height = cameraDockHeight;
+          cameraDockBounds.maxHeight = mediaAreaHeight - DEFAULT_VALUES.cameraDockMinHeight;
+          break;
+        case 'right':
+          console.log('position right');
+
+          break;
+        case 'bottom':
+          console.log('position bottom');
+          break;
+        case 'left':
+          console.log('position left');
+          if (sideBarNavigationSize.width > 0)
+            cameraDockLeft += sideBarNavigationSize.width;
+          if (sideBarContentSize.width > 0)
+            cameraDockLeft += sideBarContentSize.width;
+
+          if (input.cameraDock.width === 0) {
+            if (input.presentation.isOpen) {
+              cameraDockWidth = min(max((mediaAreaWidth * 0.2), DEFAULT_VALUES.cameraDockMinWidth), (mediaAreaWidth - DEFAULT_VALUES.cameraDockMinWidth));
+            } else {
+              cameraDockWidth = mediaAreaWidth;
+            }
+          } else {
+            cameraDockWidth = min(max(input.cameraDock.width, DEFAULT_VALUES.cameraDockMinWidth), (mediaAreaWidth - DEFAULT_VALUES.cameraDockMinWidth));
+          }
+
+          cameraDockBounds.top = DEFAULT_VALUES.navBarHeight;
+          cameraDockBounds.left = cameraDockLeft;
+          cameraDockBounds.width = cameraDockWidth;
+          cameraDockBounds.height = mediaAreaHeight;
+          break;
+        default:
+          console.log('default');
       }
     } else {
-      cameraDockSize.width = 0;
-      cameraDockSize.height = 0;
+      cameraDockBounds.width = 0;
+      cameraDockBounds.height = 0;
     }
 
-    cameraDockSize.maxHeight = mediaAreaHeight - DEFAULT_VALUES.cameraDockMinHeight;
-
-    return cameraDockSize;
+    return cameraDockBounds;
   }
 
   calculatesPresentationSize(sideBarNavigationSize, sideBarContentSize, cameraDockSize) {
@@ -133,8 +179,8 @@ class LayoutManager extends Component {
     if (input.sideBarContent.isOpen && input.sideBarNavigation.isOpen) {
       presentationSize.width = windowWidth() - (sideBarNavigationSize.width + sideBarContentSize.width);
     }
-    
-    if (input.cameraDock.numCameras > 0) {
+
+    if (input.cameraDock.numCameras > 0 && !input.cameraDock.isDragging) {
       presentationSize.height = min(max(mediaAreaHeight - cameraDockSize.height, DEFAULT_VALUES.presentationMinHeight), (mediaAreaHeight - DEFAULT_VALUES.presentationMinHeight));
     } else {
       presentationSize.height = mediaAreaHeight;
@@ -151,11 +197,11 @@ class LayoutManager extends Component {
       sideBarNavigationSize,
       sideBarContentSize,
     } = this.calculatesSideBarSize();
-    const cameraDockSize = this.calculatesCameraDockSize(
-      sideBarNavigationSize.width, sideBarContentSize.width);
+    const cameraDockBounds = this.calculatesCameraDockBounds(
+      sideBarNavigationSize, sideBarContentSize);
     const presentationSize = this.calculatesPresentationSize(
       sideBarNavigationSize, sideBarContentSize,
-      cameraDockSize);
+      cameraDockBounds);
 
     contextDispatch({
       type: ACTIONS.SET_NAVBAR_OUTPUT,
@@ -175,7 +221,7 @@ class LayoutManager extends Component {
         display: input.actionBar.hasActionBar,
         width: windowWidth() - sideBarNavigationSize.width - sideBarContentSize.width,
         height: DEFAULT_VALUES.actionBarHeight,
-        top: DEFAULT_VALUES.navBarHeight + cameraDockSize.height + presentationSize.height,
+        top: windowHeight() - DEFAULT_VALUES.actionBarHeight,
         left: sideBarNavigationSize.width + sideBarContentSize.width,
         tabOrder: DEFAULT_VALUES.actionBarTabOrder,
       }
@@ -205,16 +251,16 @@ class LayoutManager extends Component {
         tabOrder: DEFAULT_VALUES.sideBarContentTabOrder,
       }
     });
-
+console.log('---- cameraDockBounds', cameraDockBounds);
     contextDispatch({
       type: ACTIONS.SET_CAMERA_DOCK_OUTPUT,
       value: {
         display: input.cameraDock.numCameras > 0,
-        width: cameraDockSize.width,
-        maxHeight: cameraDockSize.maxHeight,
-        height: cameraDockSize.height,
-        top: DEFAULT_VALUES.cameraPosition === 'top' ? DEFAULT_VALUES.navBarHeight : 0, // fazer função para calcular a posição
-        left: sideBarNavigationSize.width + sideBarContentSize.width,
+        width: cameraDockBounds.width,
+        maxHeight: cameraDockBounds.maxHeight,
+        height: cameraDockBounds.height,
+        top: cameraDockBounds.top,
+        left: cameraDockBounds.left,
         tabOrder: 4,
       }
     });
@@ -225,7 +271,7 @@ class LayoutManager extends Component {
         display: input.presentation.isOpen,
         width: presentationSize.width,
         height: presentationSize.height,
-        top: DEFAULT_VALUES.cameraPosition === 'top' ? DEFAULT_VALUES.navBarHeight + cameraDockSize.height : 0, // fazer função para calcular a posição
+        top: DEFAULT_VALUES.cameraPosition === 'top' && !input.cameraDock.isDragging ? DEFAULT_VALUES.navBarHeight + cameraDockBounds.height : DEFAULT_VALUES.navBarHeight, // fazer função para calcular a posição
         left: sideBarNavigationSize.width + sideBarContentSize.width,
         tabOrder: DEFAULT_VALUES.presentationTabOrder,
       }

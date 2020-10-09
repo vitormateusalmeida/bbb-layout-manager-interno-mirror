@@ -1,15 +1,46 @@
-.dropZone
+.dropZoneBg
   position: absolute
   background-color: rgba(0,0,0,.2)
+  -webkit-box-shadow: inset 0px 0px 0px 1px #666
+  -moz-box-shadow: inset 0px 0px 0px 1px #666
+  box-shadow: inset 0px 0px 0px 1px #666
+  z-index: 2
+  color: rgba(0,0,0,.2)
+  font-weight: bold
+  font-family: sans-serif
+  display: flex
+  align-items: center
+  justify-content: center
+
+.dropZoneArea
+  position: absolute
+  background: transparent
+  -webkit-box-shadow: inset 0px 0px 0px 1px red
+  -moz-box-shadow: inset 0px 0px 0px 1px red
+  box-shadow: inset 0px 0px 0px 1px red
+  z-index: 4
+
+.dropZoneBgTop
+  @extend .dropZoneBg
+
+.dropZoneBgBottom
+  @extend .dropZoneBg
+
+.dropZoneBgLeft
+  @extend .dropZoneBg
+
+.dropZoneBgRight
+  @extend .dropZoneBg
+
 
 .dropZoneTop
-  @extend .dropZone
+  @extend .dropZoneArea
 
 .dropZoneBottom
-  @extend .dropZone
+  @extend .dropZoneArea
 
 .dropZoneLeft
-  @extend .dropZone
+  @extend .dropZoneArea
 
 .dropZoneRight
-  @extend .dropZone
+  @extend .dropZoneArea

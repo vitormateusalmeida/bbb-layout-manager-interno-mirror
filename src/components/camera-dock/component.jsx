@@ -34,13 +34,29 @@ export default class CameraDock extends PureComponent {
   }
 
   handleCameraDockDragStart = () => {
+    const { contextDispatch } = this.props;
+    const { ACTIONS } = LayoutContext;
     this.setState({ isDragging: true });
     document.body.style.overflow = 'hidden';
+
+    contextDispatch({
+      type: ACTIONS.SET_CAMERA_DOCK_IS_DRAGGING,
+      value: true
+    });
   }
 
-  handleCameraDockDragStop = () => {
+  handleCameraDockDragStop = (e) => {
+    const { contextDispatch } = this.props;
+    const { ACTIONS } = LayoutContext;
     this.setState({ isDragging: false });
     document.body.style.overflow = 'auto';
+
+    console.log('event', e.target.id);
+
+    contextDispatch({
+      type: ACTIONS.SET_CAMERA_DOCK_IS_DRAGGING,
+      value: false
+    });
   }
 
   setCameraDockHeight(dWidth, dHeight) {
@@ -106,6 +122,7 @@ export default class CameraDock extends PureComponent {
             }}
             style={{
               position: "absolute",
+              zIndex: 3,
             }}
           >
             <div

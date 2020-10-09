@@ -20,6 +20,7 @@ const ACTIONS = {
   SET_SIDEBAR_CONTENT_OUTPUT: 'setSideBarContentOutPut',
 
   SET_NUM_CAMERAS: 'setNumCameras',
+  SET_CAMERA_DOCK_IS_DRAGGING: 'setCameraDockIsDragging',
   SET_CAMERA_DOCK_POSITION: 'setCameraDockPosition',
   SET_CAMERA_DOCK_SIZE: 'setCameraDockSize',
   SET_CAMERA_DOCK_OUTPUT: 'setCameraDockOutPut',
@@ -71,6 +72,7 @@ const state = {
       height: 0,
       browserWidth: 0,
       browserHeight: 0,
+      isDragging: false,
     },
     presentation: {
       isOpen: true,
@@ -310,6 +312,18 @@ const reducer = (state, action) => {
           cameraDock: {
             ...state.input.cameraDock,
             numCameras: action.value,
+          }
+        }
+      };
+    }
+    case ACTIONS.SET_CAMERA_DOCK_IS_DRAGGING: {
+      return {
+        ...state,
+        input: {
+          ...state.input,
+          cameraDock: {
+            ...state.input.cameraDock,
+            isDragging: action.value,
           }
         }
       };

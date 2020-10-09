@@ -20,6 +20,7 @@ export default class SideBarContent extends PureComponent {
           height,
           top,
           left,
+          zIndex: 1,
         }}
       />
     );

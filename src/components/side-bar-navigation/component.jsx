@@ -71,6 +71,7 @@ export default class SideBarNavigation extends PureComponent {
           position: "absolute",
           top,
           left,
+          zIndex: 1,
         }}
       >
         <div
