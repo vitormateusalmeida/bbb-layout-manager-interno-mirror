@@ -5,7 +5,7 @@ import SideBarContentContainer from '../side-bar-content/container';
 import CameraDockContainer from '../camera-dock/container';
 import PresentationContainer from '../presentation/container';
 import ActionBarContainer from '../action-bar/container';
-import LayoutManager from '../Layout/layout-manager/component'
+import LayoutManager from '../Layout/layout-manager/component';
 
 export default class App extends Component {
   render() {

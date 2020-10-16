@@ -1,6 +1,7 @@
 import React, { PureComponent, Fragment } from 'react'
 import styles from './styles.module.sass';
 import LayoutContext from '../../Layout/context';
+import { CAMERADOCK_POSITION } from '../../Layout/layout-manager/defaultValues';
 
 const DROP_ZONE_DEFAUL_SIZE = 100;
 
@@ -20,12 +21,7 @@ class DropZone extends PureComponent {
       top: output.navBar.height + DROP_ZONE_DEFAUL_SIZE,
       left: output.sideBarNavigation.width
         + output.sideBarContent.width,
-      height: (
-        input.cameraDock.position === 'top'
-          || input.cameraDock.position === 'bottom'
-          ? output.presentation.height
-          : output.presentation.height
-      )
+      height: output.mediaArea.height
         - (2 * DROP_ZONE_DEFAUL_SIZE),
       width: DROP_ZONE_DEFAUL_SIZE,
     }
@@ -34,19 +30,9 @@ class DropZone extends PureComponent {
       top: output.navBar.height + DROP_ZONE_DEFAUL_SIZE,
       left: output.sideBarNavigation.width
         + output.sideBarContent.width
-        + (
-          input.cameraDock.position === 'top'
-            || input.cameraDock.position === 'bottom'
-            ? output.presentation.width
-            : output.cameraDock.width + output.presentation.width
-        )
+        + output.mediaArea.width
         - DROP_ZONE_DEFAUL_SIZE,
-      height: (
-        input.cameraDock.position === 'top'
-          || input.cameraDock.position === 'bottom'
-          ? output.presentation.height
-          : output.presentation.height
-      )
+      height: output.mediaArea.height
         - (2 * DROP_ZONE_DEFAUL_SIZE),
       width: DROP_ZONE_DEFAUL_SIZE,
     }
@@ -55,17 +41,17 @@ class DropZone extends PureComponent {
       top: output.navBar.height,
       left: output.sideBarNavigation.width
         + output.sideBarContent.width,
-      width: output.cameraDock.width,
+      width: output.mediaArea.width,
       height: DROP_ZONE_DEFAUL_SIZE,
     }
 
     dropZones.dropZoneBottom = {
       top: output.navBar.height
-        + output.presentation.height
+        + output.mediaArea.height
         - DROP_ZONE_DEFAUL_SIZE,
       left: output.sideBarNavigation.width
         + output.sideBarContent.width,
-      width: output.cameraDock.width,
+      width: output.mediaArea.width,
       height: DROP_ZONE_DEFAUL_SIZE
     }
 
@@ -84,7 +70,7 @@ class DropZone extends PureComponent {
     return (
       <Fragment>
         <div
-          id="dropZoneTop"
+          id={CAMERADOCK_POSITION.CONTENT_TOP}
           className={styles.dropZoneTop}
           style={{ ...dropZones.dropZoneTop }}
         />
@@ -93,7 +79,7 @@ class DropZone extends PureComponent {
           style={{ ...dropZones.dropZoneTop }}
         >Drop Here</div>
         <div
-          id="dropZoneRight"
+          id={CAMERADOCK_POSITION.CONTENT_RIGHT}
           className={styles.dropZoneRight}
           style={{ ...dropZones.dropZoneRight }}
         />
@@ -102,7 +88,7 @@ class DropZone extends PureComponent {
           style={{ ...dropZones.dropZoneRight }}
         >Drop Here</div>
         <div
-          id="dropZoneBottom"
+          id={CAMERADOCK_POSITION.CONTENT_BOTTOM}
           className={styles.dropZoneBottom}
           style={{ ...dropZones.dropZoneBottom }}
         />
@@ -111,7 +97,7 @@ class DropZone extends PureComponent {
           style={{ ...dropZones.dropZoneBottom }}
         >Drop Here</div>
         <div
-          id="dropZoneLeft"
+          id={CAMERADOCK_POSITION.CONTENT_LEFT}
           className={styles.dropZoneLeft}
           style={{ ...dropZones.dropZoneLeft }}
         />

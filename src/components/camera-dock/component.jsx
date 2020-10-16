@@ -2,7 +2,7 @@ import React, { PureComponent, Fragment } from 'react';
 import styles from './styles.module.sass';
 import { Resizable } from 're-resizable';
 import LayoutContext from '../Layout/context';
-import DEFAULT_VALUES from '../Layout/layout-manager/defaultValues';
+import DEFAULT_VALUES, { CAMERADOCK_POSITION } from '../Layout/layout-manager/defaultValues';
 import _ from 'lodash';
 import Draggable from 'react-draggable';
 import DropZone from './drop-zone/component';
@@ -52,6 +52,13 @@ export default class CameraDock extends PureComponent {
     document.body.style.overflow = 'auto';
 
     console.log('event', e.target.id);
+
+    if (Object.values(CAMERADOCK_POSITION).includes(e.target.id)) {
+      contextDispatch({
+        type: ACTIONS.SET_CAMERA_DOCK_POSITION,
+        value: e.target.id,
+      });
+    }
 
     contextDispatch({
       type: ACTIONS.SET_CAMERA_DOCK_IS_DRAGGING,

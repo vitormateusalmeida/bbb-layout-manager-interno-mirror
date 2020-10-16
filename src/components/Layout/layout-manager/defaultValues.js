@@ -1,7 +1,15 @@
+const CAMERADOCK_POSITION = {
+  CONTENT_TOP: 'contentTop',
+  CONTENT_RIGHT: 'contentRight',
+  CONTENT_BOTTOM: 'contentBottom',
+  CONTENT_LEFT: 'contentLeft',
+  SIDEBAR_CONTENT_BOTTOM: 'sidebarContentBottom',
+}
+
 const DEFAULT_VALUES = {
   panelType: 'chat',
 
-  cameraPosition: 'left',
+  cameraPosition: 'contentTop',
   cameraDockTabOrder: 4,
   cameraDockMinHeight: 140,
   cameraDockMinWidth: 140,
@@ -31,3 +39,6 @@ const DEFAULT_VALUES = {
 }
 
 export default DEFAULT_VALUES;
+export {
+  CAMERADOCK_POSITION
+};

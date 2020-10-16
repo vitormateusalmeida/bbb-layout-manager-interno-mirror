@@ -19,6 +19,8 @@ const ACTIONS = {
   SET_SIDEBAR_CONTENT_PANEL_TYPE: 'setSideBarContentPanelType',
   SET_SIDEBAR_CONTENT_OUTPUT: 'setSideBarContentOutPut',
 
+  SET_MEDIA_AREA_SIZE: 'setMediaAreaSize',
+
   SET_NUM_CAMERAS: 'setNumCameras',
   SET_CAMERA_DOCK_IS_DRAGGING: 'setCameraDockIsDragging',
   SET_CAMERA_DOCK_POSITION: 'setCameraDockPosition',
@@ -133,6 +135,10 @@ const state = {
       left: 0,
       currentPanelType: '',
       tabOrder: 0,
+    },
+    mediaArea: {
+      width: 0,
+      height: 0,
     },
     cameraDock: {
       display: false,
@@ -299,6 +305,20 @@ const reducer = (state, action) => {
             left: action.value.left,
             currentPanelType: action.value.currentPanelType,
             tabOrder: action.value.tabOrder
+          }
+        }
+      };
+    }
+
+    case ACTIONS.SET_MEDIA_AREA_SIZE: {
+      return {
+        ...state,
+        output: {
+          ...state.output,
+          mediaArea: {
+            ...state.output.mediaArea,
+            width: action.value.width,
+            height: action.value.height,
           }
         }
       };
