@@ -51,34 +51,48 @@ class LayoutManager extends Component {
       sideBarContentMaxWidth,
     } = DEFAULT_VALUES;
 
-    let sideBarNavigationBounds;
-    let sideBarContentBounds;
+    let sideBarNavigationBounds = {
+      width: 0,
+      height: 0,
+    };
+    let sideBarContentBounds = {
+      width: 0,
+      height: 0,
+    };
     if (input.sideBarNavigation.isOpen) {
       if (input.sideBarNavigation.width === 0) {
-        sideBarNavigationBounds = {
-          width: min(max((windowWidth() * 0.2), sideBarNavMinWidth), sideBarNavMaxWidth),
-        }
+        sideBarNavigationBounds.width = min(max((windowWidth() * 0.2), sideBarNavMinWidth), sideBarNavMaxWidth);
       } else {
-        sideBarNavigationBounds = {
-          width: min(max(input.sideBarNavigation.width, sideBarNavMinWidth), sideBarNavMaxWidth),
-        }
+        sideBarNavigationBounds.width = min(max(input.sideBarNavigation.width, sideBarNavMinWidth), sideBarNavMaxWidth);
       }
+      sideBarNavigationBounds.height = windowHeight();
+    } else {
+      sideBarNavigationBounds.width = 0;
+      sideBarNavigationBounds.height = 0;
     }
     if (input.sideBarContent.isOpen) {
       if (input.sideBarContent.width === 0) {
-        sideBarContentBounds = {
-          width: min(max((windowWidth() * 0.2), sideBarContentMinWidth), sideBarContentMaxWidth),
+        sideBarContentBounds.width = min(max((windowWidth() * 0.2), sideBarContentMinWidth), sideBarContentMaxWidth);
+      } else {
+        sideBarContentBounds.width = min(max(input.sideBarContent.width, sideBarContentMinWidth), sideBarContentMaxWidth);
+      }
+      if (input.sideBarContent.height === 0) {
+        if (input.cameraDock.position === CAMERADOCK_POSITION.SIDEBAR_CONTENT_BOTTOM) {
+          sideBarContentBounds.height = windowHeight() - (windowHeight() * 0.2);
+        } else {
+          sideBarContentBounds.height = windowHeight();
         }
       } else {
-        sideBarContentBounds = {
-          width: min(max(input.sideBarContent.width, sideBarContentMinWidth), sideBarContentMaxWidth),
-        }
+        sideBarContentBounds.height = input.sideBarContent.height;
       }
+    } else {
+      sideBarContentBounds.width = 0;
+      sideBarContentBounds.height = 0;
     }
 
     return {
       sideBarNavigationBounds,
-      sideBarContentBounds
+      sideBarContentBounds,
     }
   }
 
@@ -180,6 +194,14 @@ class LayoutManager extends Component {
           cameraDockBounds.height = mediaAreaHeight;
           cameraDockBounds.maxHeight = mediaAreaHeight;
           break;
+        case CAMERADOCK_POSITION.SIDEBAR_CONTENT_BOTTOM:
+          cameraDockWidth = sideBarContentBounds.width;
+          cameraDockBounds.top = sideBarContentBounds.height;
+          cameraDockBounds.left = sideBarNavigationBounds.width;
+          cameraDockBounds.width = sideBarContentBounds.width;
+          cameraDockBounds.height = windowHeight() * 0.2;
+          cameraDockBounds.maxHeight = windowHeight() * 0.2;
+          break;
         default:
           console.log('default');
       }
@@ -225,6 +247,13 @@ class LayoutManager extends Component {
           presentationBounds.left = sideBarNavigationBounds.width
             + sideBarContentBounds.width
             + mediaAreaWidth - presentationBounds.width;
+          break;
+        case CAMERADOCK_POSITION.SIDEBAR_CONTENT_BOTTOM:
+          presentationBounds.width = mediaAreaWidth;
+          presentationBounds.height = mediaAreaHeight;
+          presentationBounds.top = DEFAULT_VALUES.navBarHeight;
+          presentationBounds.left = sideBarNavigationBounds.width
+            + sideBarContentBounds.width;
           break;
         default:
           console.log('presentation - camera default');
@@ -291,7 +320,7 @@ class LayoutManager extends Component {
       value: {
         display: input.sideBarNavigation.isOpen,
         width: sideBarNavigationBounds.width,
-        height: DEFAULT_VALUES.sideBarNavHeight,
+        height: sideBarNavigationBounds.height,
         top: DEFAULT_VALUES.sideBarNavTop,
         left: DEFAULT_VALUES.sideBarNavLeft,
         tabOrder: DEFAULT_VALUES.sideBarNavTabOrder,
@@ -303,14 +332,14 @@ class LayoutManager extends Component {
       value: {
         display: input.sideBarContent.isOpen,
         width: sideBarContentBounds.width,
-        height: DEFAULT_VALUES.sideBarContentHeight,
+        height: sideBarContentBounds.height,
         top: DEFAULT_VALUES.sideBarContentTop,
         left: sideBarNavigationBounds.width,
         currentPanelType: input.currentPanelType,
         tabOrder: DEFAULT_VALUES.sideBarContentTabOrder,
       }
     });
-    console.log('---- cameraDockBounds', cameraDockBounds);
+
     contextDispatch({
       type: ACTIONS.SET_CAMERA_DOCK_OUTPUT,
       value: {

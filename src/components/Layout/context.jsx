@@ -59,12 +59,14 @@ const state = {
     sideBarNavigation: {
       isOpen: true,
       width: 0,
+      height: 0,
       browserWidth: 0
     },
     sideBarContent: {
       isOpen: true,
       currentPanelType: DEFAULT_VALUES.panelType,
       width: 0,
+      height: 0,
       browserWidth: 0
     },
     cameraDock: {

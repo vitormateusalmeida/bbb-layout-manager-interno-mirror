@@ -51,8 +51,6 @@ export default class CameraDock extends PureComponent {
     this.setState({ isDragging: false });
     document.body.style.overflow = 'auto';
 
-    console.log('event', e.target.id);
-
     if (Object.values(CAMERADOCK_POSITION).includes(e.target.id)) {
       contextDispatch({
         type: ACTIONS.SET_CAMERA_DOCK_POSITION,
@@ -90,6 +88,7 @@ export default class CameraDock extends PureComponent {
       top,
       left,
       tabOrder,
+      position,
     } = this.props;
     const {
       isResizing,
@@ -117,7 +116,10 @@ export default class CameraDock extends PureComponent {
               height: resizableHeight,
             }}
             enable={{
-              bottom: true
+              bottom: position === CAMERADOCK_POSITION.CONTENT_TOP || position === CAMERADOCK_POSITION.CONTENT_BOTTOM,
+              right: position === CAMERADOCK_POSITION.CONTENT_LEFT,
+              left: position === CAMERADOCK_POSITION.CONTENT_RIGHT,
+              top: position === CAMERADOCK_POSITION.CONTENT_BOTTOM,
             }}
             handleWrapperClass="resizecameraDockWrapper"
             onResizeStart={() => {

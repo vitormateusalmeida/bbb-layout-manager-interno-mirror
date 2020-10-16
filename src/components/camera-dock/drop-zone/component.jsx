@@ -5,19 +5,22 @@ import { CAMERADOCK_POSITION } from '../../Layout/layout-manager/defaultValues';
 
 const DROP_ZONE_DEFAUL_SIZE = 100;
 
+const windowWidth = () => window.document.documentElement.clientWidth;
+const windowHeight = () => window.document.documentElement.clientHeight;
+
 class DropZone extends PureComponent {
   calculatesDropZoneSize() {
     const { contextState, contextDispatch } = this.props;
     const { input, output } = contextState;
 
     let dropZones = {
-      dropZoneLeft: {},
-      dropZoneRight: {},
-      dropZoneTop: {},
-      dropZoneBottom: {},
+      contentTop: {},
+      contentRight: {},
+      contentBottom: {},
+      contentLeft: {},
     }
 
-    dropZones.dropZoneLeft = {
+    dropZones.contentLeft = {
       top: output.navBar.height + DROP_ZONE_DEFAUL_SIZE,
       left: output.sideBarNavigation.width
         + output.sideBarContent.width,
@@ -26,7 +29,7 @@ class DropZone extends PureComponent {
       width: DROP_ZONE_DEFAUL_SIZE,
     }
 
-    dropZones.dropZoneRight = {
+    dropZones.contentRight = {
       top: output.navBar.height + DROP_ZONE_DEFAUL_SIZE,
       left: output.sideBarNavigation.width
         + output.sideBarContent.width
@@ -37,7 +40,7 @@ class DropZone extends PureComponent {
       width: DROP_ZONE_DEFAUL_SIZE,
     }
 
-    dropZones.dropZoneTop = {
+    dropZones.contentTop = {
       top: output.navBar.height,
       left: output.sideBarNavigation.width
         + output.sideBarContent.width,
@@ -45,7 +48,7 @@ class DropZone extends PureComponent {
       height: DROP_ZONE_DEFAUL_SIZE,
     }
 
-    dropZones.dropZoneBottom = {
+    dropZones.contentBottom = {
       top: output.navBar.height
         + output.mediaArea.height
         - DROP_ZONE_DEFAUL_SIZE,
@@ -55,55 +58,72 @@ class DropZone extends PureComponent {
       height: DROP_ZONE_DEFAUL_SIZE
     }
 
+    dropZones.sideBarContentBottom = {
+      top: windowHeight() - DROP_ZONE_DEFAUL_SIZE,
+      left: output.sideBarNavigation.width,
+      width: output.sideBarContent.width,
+      height: DROP_ZONE_DEFAUL_SIZE,
+    }
+
     return { dropZones };
   }
 
   render() {
     const { contextState, contextDispatch } = this.props;
     const { input, output } = contextState;
-    console.log('input', input);
-    console.log('output', output);
 
     const { dropZones } = this.calculatesDropZoneSize();
-    console.log('dropZones', dropZones);
 
     return (
       <Fragment>
         <div
           id={CAMERADOCK_POSITION.CONTENT_TOP}
-          className={styles.dropZoneTop}
-          style={{ ...dropZones.dropZoneTop }}
+          className={styles.dropZoneArea}
+          style={{ ...dropZones.contentTop }}
         />
         <div
-          className={styles.dropZoneBgTop}
-          style={{ ...dropZones.dropZoneTop }}
+          className={styles.dropZoneBg}
+          style={{ ...dropZones.contentTop }}
         >Drop Here</div>
+        
         <div
           id={CAMERADOCK_POSITION.CONTENT_RIGHT}
-          className={styles.dropZoneRight}
-          style={{ ...dropZones.dropZoneRight }}
+          className={styles.dropZoneArea}
+          style={{ ...dropZones.contentRight }}
         />
         <div
-          className={styles.dropZoneBgRight}
-          style={{ ...dropZones.dropZoneRight }}
+          className={styles.dropZoneBg}
+          style={{ ...dropZones.contentRight }}
         >Drop Here</div>
+
         <div
           id={CAMERADOCK_POSITION.CONTENT_BOTTOM}
-          className={styles.dropZoneBottom}
-          style={{ ...dropZones.dropZoneBottom }}
+          className={styles.dropZoneArea}
+          style={{ ...dropZones.contentBottom }}
         />
         <div
-          className={styles.dropZoneBgBottom}
-          style={{ ...dropZones.dropZoneBottom }}
+          className={styles.dropZoneBg}
+          style={{ ...dropZones.contentBottom }}
         >Drop Here</div>
+
         <div
           id={CAMERADOCK_POSITION.CONTENT_LEFT}
-          className={styles.dropZoneLeft}
-          style={{ ...dropZones.dropZoneLeft }}
+          className={styles.dropZoneArea}
+          style={{ ...dropZones.contentLeft }}
         />
         <div
-          className={styles.dropZoneBgLeft}
-          style={{ ...dropZones.dropZoneLeft }}
+          className={styles.dropZoneBg}
+          style={{ ...dropZones.contentLeft }}
+        >Drop Here</div>
+
+        <div
+          id={CAMERADOCK_POSITION.SIDEBAR_CONTENT_BOTTOM}
+          className={styles.dropZoneArea}
+          style={{ ...dropZones.sideBarContentBottom }}
+        />
+        <div
+          className={styles.dropZoneBg}
+          style={{ ...dropZones.sideBarContentBottom }}
         >Drop Here</div>
       </Fragment>
     );
