@@ -43,7 +43,7 @@ class LayoutManager extends Component {
 
   calculatesSideBarSize() {
     const { contextState } = this.props;
-    const { input } = contextState;
+    const { input, output } = contextState;
     const {
       sideBarNavMinWidth,
       sideBarNavMaxWidth,
@@ -78,7 +78,11 @@ class LayoutManager extends Component {
       }
       if (input.sideBarContent.height === 0) {
         if (input.cameraDock.position === CAMERADOCK_POSITION.SIDEBAR_CONTENT_BOTTOM) {
-          sideBarContentBounds.height = windowHeight() - (windowHeight() * 0.2);
+          if (input.cameraDock.height === 0) {
+            sideBarContentBounds.height = windowHeight() - (windowHeight() * 0.2);
+          } else {
+            sideBarContentBounds.height = windowHeight() - input.cameraDock.height;
+          }
         } else {
           sideBarContentBounds.height = windowHeight();
         }
@@ -199,8 +203,10 @@ class LayoutManager extends Component {
           cameraDockBounds.top = sideBarContentBounds.height;
           cameraDockBounds.left = sideBarNavigationBounds.width;
           cameraDockBounds.width = sideBarContentBounds.width;
-          cameraDockBounds.height = windowHeight() * 0.2;
-          cameraDockBounds.maxHeight = windowHeight() * 0.2;
+          cameraDockBounds.height = input.cameraDock.height !== 0
+            ? input.cameraDock.height
+            : windowHeight() * 0.2;
+          cameraDockBounds.maxHeight = windowHeight() * 0.8;
           break;
         default:
           console.log('default');

@@ -119,7 +119,7 @@ export default class CameraDock extends PureComponent {
               bottom: position === CAMERADOCK_POSITION.CONTENT_TOP || position === CAMERADOCK_POSITION.CONTENT_BOTTOM,
               right: position === CAMERADOCK_POSITION.CONTENT_LEFT,
               left: position === CAMERADOCK_POSITION.CONTENT_RIGHT,
-              top: position === CAMERADOCK_POSITION.CONTENT_BOTTOM,
+              top: position === CAMERADOCK_POSITION.CONTENT_BOTTOM || position === CAMERADOCK_POSITION.SIDEBAR_CONTENT_BOTTOM,
             }}
             handleWrapperClass="resizecameraDockWrapper"
             onResizeStart={() => {
@@ -141,6 +141,9 @@ export default class CameraDock extends PureComponent {
                 display: !display ? 'none' : 'flex',
                 width: '100%',
                 height: '100%',
+                opacity: isDragging
+                  ? 0.5
+                  : undefined,
               }}
             ></div>
           </Resizable>

@@ -6,6 +6,7 @@ import CameraDockContainer from '../camera-dock/container';
 import PresentationContainer from '../presentation/container';
 import ActionBarContainer from '../action-bar/container';
 import LayoutManager from '../Layout/layout-manager/component';
+import styles from './styles.module.sass';
 
 export default class App extends Component {
   render() {
