@@ -1,23 +1,24 @@
 import React, { createContext, useReducer } from 'react';
 import DEFAULT_VALUES from './layout-manager/defaultValues';
+import logger from 'use-reducer-logger';
 
 const Context = createContext();
 
 const ACTIONS = {
   SET_BROWSER_SIZE: 'SET_BROWSER_SIZE',
 
-  SET_NAVBAR_OUTPUT: 'setNavBarOutPut',
+  SET_NAVBAR_OUTPUT: 'setNavBarOutput',
 
   SET_ACTIONBAR_OUTPUT: 'setActionBarOutput',
 
   SET_SIDEBAR_NAVIGATION_IS_OPEN: 'setSideBarNavigationIsOpen',
   SET_SIDEBAR_NAVIGATION_SIZE: 'setSideBarNavigationSize',
-  SET_SIDEBAR_NAVIGATION_OUTPUT: 'setSideBarNavigationOutPut',
+  SET_SIDEBAR_NAVIGATION_OUTPUT: 'setSideBarNavigationOutput',
 
   SET_SIDEBAR_CONTENT_IS_OPEN: 'setSideBarContentIsOpen',
   SET_SIDEBAR_CONTENT_SIZE: 'setSideBarContentSize',
   SET_SIDEBAR_CONTENT_PANEL_TYPE: 'setSideBarContentPanelType',
-  SET_SIDEBAR_CONTENT_OUTPUT: 'setSideBarContentOutPut',
+  SET_SIDEBAR_CONTENT_OUTPUT: 'setSideBarContentOutput',
 
   SET_MEDIA_AREA_SIZE: 'setMediaAreaSize',
 
@@ -25,12 +26,12 @@ const ACTIONS = {
   SET_CAMERA_DOCK_IS_DRAGGING: 'setCameraDockIsDragging',
   SET_CAMERA_DOCK_POSITION: 'setCameraDockPosition',
   SET_CAMERA_DOCK_SIZE: 'setCameraDockSize',
-  SET_CAMERA_DOCK_OUTPUT: 'setCameraDockOutPut',
+  SET_CAMERA_DOCK_OUTPUT: 'setCameraDockOutput',
 
   SET_PRESENTATION_IS_OPEN: 'setPresentationIsOpen',
   SET_PRESENTATION_SLIDE_SIZE: 'setPresentationSlideSize',
   SET_PRESENTATION_SIZE: 'setPresentationSize',
-  SET_PRESENTATION_OUTPUT: 'setPresentationOutPut',
+  SET_PRESENTATION_OUTPUT: 'setPresentationOutput',
 
   SET_HAS_SCREEN_SHARE: 'setHasScreenShare',
   SET_SCREEN_SHARE_SIZE: 'setScreenShareSize',
@@ -516,7 +517,7 @@ const reducer = (state, action) => {
 };
 
 const ContextProvider = (props) => {
-  const [contextState, contextDispatch] = useReducer(reducer, state);
+  const [contextState, contextDispatch] = useReducer(logger(reducer), state);
   const { children } = props;
   return (
     <Context.Provider value={{

@@ -17,6 +17,7 @@ export default class CameraDock extends PureComponent {
       isDragging: false,
       isResizing: false,
       resizeStartHeight: 0,
+      resizeStartWidth: 0,
       position: {
         x: 0, y: 0
       }
@@ -64,21 +65,36 @@ export default class CameraDock extends PureComponent {
     });
   }
 
-  setCameraDockHeight(dWidth, dHeight) {
-    const { resizeStartHeight } = this.state;
-    const { contextDispatch } = this.props;
+  setCameraDockSize(dWidth, dHeight) {
+    const { resizeStartHeight, resizeStartWidth } = this.state;
+    const { contextDispatch, position } = this.props;
     const { ACTIONS } = LayoutContext;
 
-    this.setState({ resizableHeight: resizeStartHeight + dHeight });
-
-    contextDispatch({
-      type: ACTIONS.SET_CAMERA_DOCK_SIZE,
-      value: {
-        height: resizeStartHeight + dHeight,
-        browserWidth: window.innerWidth,
-        browserHeight: window.innerHeight,
-      }
-    });
+    if (position === CAMERADOCK_POSITION.CONTENT_TOP
+      || position === CAMERADOCK_POSITION.CONTENT_BOTTOM
+      || position === CAMERADOCK_POSITION.SIDEBAR_CONTENT_BOTTOM) {
+      this.setState({ resizableHeight: resizeStartHeight + dHeight });
+      contextDispatch({
+        type: ACTIONS.SET_CAMERA_DOCK_SIZE,
+        value: {
+          height: resizeStartHeight + dHeight,
+          browserWidth: window.innerWidth,
+          browserHeight: window.innerHeight,
+        }
+      });
+    }
+    if (position === CAMERADOCK_POSITION.CONTENT_RIGHT
+      || position === CAMERADOCK_POSITION.CONTENT_LEFT) {
+      this.setState({ resizableWidth: resizeStartWidth + dWidth });
+      contextDispatch({
+        type: ACTIONS.SET_CAMERA_DOCK_SIZE,
+        value: {
+          width: resizeStartWidth + dWidth,
+          browserWidth: window.innerWidth,
+          browserHeight: window.innerHeight,
+        }
+      });
+    }
   }
 
   render() {
@@ -123,11 +139,19 @@ export default class CameraDock extends PureComponent {
             }}
             handleWrapperClass="resizecameraDockWrapper"
             onResizeStart={() => {
-              this.setState({ isResizing: true, resizeStartHeight: resizableHeight });
+              this.setState({
+                isResizing: true,
+                resizeStartHeight: resizableHeight,
+                resizeStartWidth: resizableWidth,
+              });
             }}
-            onResize={(e, direction, ref, d) => this.setCameraDockHeight(d.width, d.height)}
+            onResize={(e, direction, ref, d) => this.setCameraDockSize(d.width, d.height)}
             onResizeStop={(e, direction, ref, d) => {
-              this.setState({ isResizing: false, resizeStartHeight: 0 });
+              this.setState({
+                isResizing: false,
+                resizeStartHeight: 0,
+                resizeStartWidth: 0,
+              });
             }}
             style={{
               position: "absolute",

@@ -41,76 +41,85 @@ class LayoutManager extends Component {
     this.throttledCalculatesLayout();
   }
 
-  calculatesSideBarSize() {
+  calculatesSideBarNavWidth() {
     const { contextState } = this.props;
-    const { input, output } = contextState;
+    const { input } = contextState;
     const {
       sideBarNavMinWidth,
       sideBarNavMaxWidth,
+    } = DEFAULT_VALUES;
+    let sideBarNavWidth = 0;
+    if (input.sideBarNavigation.isOpen) {
+      if (input.sideBarNavigation.width === 0) {
+        sideBarNavWidth = min(max((windowWidth() * 0.2), sideBarNavMinWidth), sideBarNavMaxWidth);
+      } else {
+        sideBarNavWidth = min(max(input.sideBarNavigation.width, sideBarNavMinWidth), sideBarNavMaxWidth);
+      }
+    } else {
+      sideBarNavWidth = 0;
+    }
+    return sideBarNavWidth;
+  }
+
+  calculatesSideBarNavHeight() {
+    const { contextState } = this.props;
+    const { input } = contextState;
+    let sideBarNavHeight = 0;
+    if (input.sideBarNavigation.isOpen) {
+      sideBarNavHeight = windowHeight();
+    } else {
+      sideBarNavHeight = 0;
+    }
+    return sideBarNavHeight;
+  }
+
+  calculatesSideBarContentWidth() {
+    const { contextState } = this.props;
+    const { input } = contextState;
+    const {
       sideBarContentMinWidth,
       sideBarContentMaxWidth,
     } = DEFAULT_VALUES;
-
-    let sideBarNavigationBounds = {
-      width: 0,
-      height: 0,
-    };
-    let sideBarContentBounds = {
-      width: 0,
-      height: 0,
-    };
-    if (input.sideBarNavigation.isOpen) {
-      if (input.sideBarNavigation.width === 0) {
-        sideBarNavigationBounds.width = min(max((windowWidth() * 0.2), sideBarNavMinWidth), sideBarNavMaxWidth);
-      } else {
-        sideBarNavigationBounds.width = min(max(input.sideBarNavigation.width, sideBarNavMinWidth), sideBarNavMaxWidth);
-      }
-      sideBarNavigationBounds.height = windowHeight();
-    } else {
-      sideBarNavigationBounds.width = 0;
-      sideBarNavigationBounds.height = 0;
-    }
+    let sideBarContentWidth = 0;
     if (input.sideBarContent.isOpen) {
       if (input.sideBarContent.width === 0) {
-        sideBarContentBounds.width = min(max((windowWidth() * 0.2), sideBarContentMinWidth), sideBarContentMaxWidth);
+        sideBarContentWidth = min(max((windowWidth() * 0.2), sideBarContentMinWidth), sideBarContentMaxWidth);
       } else {
-        sideBarContentBounds.width = min(max(input.sideBarContent.width, sideBarContentMinWidth), sideBarContentMaxWidth);
-      }
-      if (input.sideBarContent.height === 0) {
-        if (input.cameraDock.position === CAMERADOCK_POSITION.SIDEBAR_CONTENT_BOTTOM) {
-          if (input.cameraDock.height === 0) {
-            sideBarContentBounds.height = windowHeight() - (windowHeight() * 0.2);
-          } else {
-            sideBarContentBounds.height = windowHeight() - input.cameraDock.height;
-          }
-        } else {
-          sideBarContentBounds.height = windowHeight();
-        }
-      } else {
-        sideBarContentBounds.height = input.sideBarContent.height;
+        sideBarContentWidth = min(max(input.sideBarContent.width, sideBarContentMinWidth), sideBarContentMaxWidth);
       }
     } else {
-      sideBarContentBounds.width = 0;
-      sideBarContentBounds.height = 0;
+      sideBarContentWidth = 0;
     }
-
-    return {
-      sideBarNavigationBounds,
-      sideBarContentBounds,
-    }
+    return sideBarContentWidth;
   }
 
-  calculatesCameraDockBounds(sideBarNavigationBounds, sideBarContentBounds) {
+  calculatesSideBarContentHeight(cameraDockHeight) {
+    const { contextState } = this.props;
+    const { input } = contextState;
+    let sideBarContentHeight = 0;
+    if (input.sideBarContent.isOpen) {
+      if (input.cameraDock.position === CAMERADOCK_POSITION.SIDEBAR_CONTENT_BOTTOM) {
+        sideBarContentHeight = windowHeight() - cameraDockHeight;
+      } else {
+        sideBarContentHeight = windowHeight();
+      }
+    } else {
+      sideBarContentHeight = 0;
+    }
+    return sideBarContentHeight;
+  }
+
+  calculatesCameraDockBounds(sideBarNavWidth, sideBarContentWidth) {
     const { contextState } = this.props;
     const { input } = contextState;
     const mediaAreaHeight = windowHeight() - (DEFAULT_VALUES.navBarHeight + DEFAULT_VALUES.actionBarHeight);
     let mediaAreaWidth = 0;
     if (input.sideBarNavigation.isOpen && !input.sideBarContent.isOpen)
-      mediaAreaWidth = windowWidth() - sideBarNavigationBounds.width;
+      mediaAreaWidth = windowWidth() - sideBarNavWidth;
     if (input.sideBarContent.isOpen && !input.sideBarNavigation.isOpen)
-      mediaAreaWidth = windowWidth() - sideBarContentBounds.width;
+      mediaAreaWidth = windowWidth() - sideBarContentWidth;
     if (input.sideBarContent.isOpen && input.sideBarNavigation.isOpen)
-      mediaAreaWidth = windowWidth() - (sideBarNavigationBounds.width + sideBarContentBounds.width);
+      mediaAreaWidth = windowWidth() - (sideBarNavWidth + sideBarContentWidth);
     let cameraDockBounds = {};
 
     if (input.cameraDock.numCameras > 0) {
@@ -119,10 +128,10 @@ class LayoutManager extends Component {
       let cameraDockWidth = 0;
       switch (input.cameraDock.position) {
         case CAMERADOCK_POSITION.CONTENT_TOP:
-          if (sideBarNavigationBounds.width > 0)
-            cameraDockLeft += sideBarNavigationBounds.width;
-          if (sideBarContentBounds.width > 0)
-            cameraDockLeft += sideBarContentBounds.width;
+          if (sideBarNavWidth > 0)
+            cameraDockLeft += sideBarNavWidth;
+          if (sideBarContentWidth > 0)
+            cameraDockLeft += sideBarContentWidth;
 
           if (input.cameraDock.height === 0) {
             if (input.presentation.isOpen) {
@@ -153,17 +162,17 @@ class LayoutManager extends Component {
 
           cameraDockBounds.top = DEFAULT_VALUES.navBarHeight;
           cameraDockBounds.left = input.presentation.isOpen
-            ? (sideBarNavigationBounds.width + sideBarContentBounds.width + mediaAreaWidth) - cameraDockWidth
-            : sideBarNavigationBounds.width + sideBarContentBounds.width;
+            ? (sideBarNavWidth + sideBarContentWidth + mediaAreaWidth) - cameraDockWidth
+            : sideBarNavWidth + sideBarContentWidth;
           cameraDockBounds.width = cameraDockWidth;
           cameraDockBounds.height = mediaAreaHeight;
           cameraDockBounds.maxHeight = mediaAreaHeight;
           break;
         case CAMERADOCK_POSITION.CONTENT_BOTTOM:
-          if (sideBarNavigationBounds.width > 0)
-            cameraDockLeft += sideBarNavigationBounds.width;
-          if (sideBarContentBounds.width > 0)
-            cameraDockLeft += sideBarContentBounds.width;
+          if (sideBarNavWidth > 0)
+            cameraDockLeft += sideBarNavWidth;
+          if (sideBarContentWidth > 0)
+            cameraDockLeft += sideBarContentWidth;
 
           if (input.cameraDock.height === 0) {
             if (input.presentation.isOpen) {
@@ -193,19 +202,22 @@ class LayoutManager extends Component {
           }
 
           cameraDockBounds.top = DEFAULT_VALUES.navBarHeight;
-          cameraDockBounds.left = sideBarNavigationBounds.width + sideBarContentBounds.width;
+          cameraDockBounds.left = sideBarNavWidth + sideBarContentWidth;
           cameraDockBounds.width = cameraDockWidth;
           cameraDockBounds.height = mediaAreaHeight;
           cameraDockBounds.maxHeight = mediaAreaHeight;
           break;
         case CAMERADOCK_POSITION.SIDEBAR_CONTENT_BOTTOM:
-          cameraDockWidth = sideBarContentBounds.width;
-          cameraDockBounds.top = sideBarContentBounds.height;
-          cameraDockBounds.left = sideBarNavigationBounds.width;
-          cameraDockBounds.width = sideBarContentBounds.width;
-          cameraDockBounds.height = input.cameraDock.height !== 0
-            ? input.cameraDock.height
-            : windowHeight() * 0.2;
+          if (input.cameraDock.height === 0) {
+            cameraDockHeight = min(max((windowHeight() * 0.2), DEFAULT_VALUES.cameraDockMinHeight), (windowHeight() - DEFAULT_VALUES.cameraDockMinHeight));
+          } else {
+            cameraDockHeight = min(max(input.cameraDock.height, DEFAULT_VALUES.cameraDockMinHeight), (windowHeight() - DEFAULT_VALUES.cameraDockMinHeight));
+          }
+
+          cameraDockBounds.top = windowHeight() - cameraDockHeight;
+          cameraDockBounds.left = sideBarNavWidth;
+          cameraDockBounds.width = sideBarContentWidth;
+          cameraDockBounds.height = cameraDockHeight;
           cameraDockBounds.maxHeight = windowHeight() * 0.8;
           break;
         default:
@@ -219,11 +231,11 @@ class LayoutManager extends Component {
     return cameraDockBounds;
   }
 
-  calculatesPresentationBounds(sideBarNavigationBounds, sideBarContentBounds, cameraDockBounds) {
+  calculatesPresentationBounds(sideBarNavWidth, sideBarContentWidth, cameraDockBounds) {
     const { contextState } = this.props;
     const { input } = contextState;
     const mediaAreaHeight = windowHeight() - (DEFAULT_VALUES.navBarHeight + DEFAULT_VALUES.actionBarHeight);
-    const mediaAreaWidth = windowWidth() - (sideBarNavigationBounds.width + sideBarContentBounds.width)
+    const mediaAreaWidth = windowWidth() - (sideBarNavWidth + sideBarContentWidth)
     let presentationBounds = {};
 
     if (input.cameraDock.numCameras > 0 && !input.cameraDock.isDragging) {
@@ -232,34 +244,32 @@ class LayoutManager extends Component {
           presentationBounds.width = mediaAreaWidth;
           presentationBounds.height = mediaAreaHeight - cameraDockBounds.height;
           presentationBounds.top = DEFAULT_VALUES.navBarHeight + cameraDockBounds.height;
-          presentationBounds.left = sideBarNavigationBounds.width + sideBarContentBounds.width;
+          presentationBounds.left = sideBarNavWidth + sideBarContentWidth;
           break;
         case CAMERADOCK_POSITION.CONTENT_RIGHT:
           presentationBounds.width = mediaAreaWidth - cameraDockBounds.width;
           presentationBounds.height = mediaAreaHeight;
           presentationBounds.top = DEFAULT_VALUES.navBarHeight;
-          presentationBounds.left = sideBarNavigationBounds.width + sideBarContentBounds.width;
+          presentationBounds.left = sideBarNavWidth + sideBarContentWidth;
           break;
         case CAMERADOCK_POSITION.CONTENT_BOTTOM:
           presentationBounds.width = mediaAreaWidth;
           presentationBounds.height = mediaAreaHeight - cameraDockBounds.height;
           presentationBounds.top = DEFAULT_VALUES.navBarHeight;
-          presentationBounds.left = sideBarNavigationBounds.width + sideBarContentBounds.width;
+          presentationBounds.left = sideBarNavWidth + sideBarContentWidth;
           break;
         case CAMERADOCK_POSITION.CONTENT_LEFT:
           presentationBounds.width = mediaAreaWidth - cameraDockBounds.width;
           presentationBounds.height = mediaAreaHeight;
           presentationBounds.top = DEFAULT_VALUES.navBarHeight;
-          presentationBounds.left = sideBarNavigationBounds.width
-            + sideBarContentBounds.width
-            + mediaAreaWidth - presentationBounds.width;
+          presentationBounds.left = sideBarNavWidth
+            + sideBarContentWidth + mediaAreaWidth - presentationBounds.width;
           break;
         case CAMERADOCK_POSITION.SIDEBAR_CONTENT_BOTTOM:
           presentationBounds.width = mediaAreaWidth;
           presentationBounds.height = mediaAreaHeight;
           presentationBounds.top = DEFAULT_VALUES.navBarHeight;
-          presentationBounds.left = sideBarNavigationBounds.width
-            + sideBarContentBounds.width;
+          presentationBounds.left = sideBarNavWidth + sideBarContentWidth;
           break;
         default:
           console.log('presentation - camera default');
@@ -268,8 +278,7 @@ class LayoutManager extends Component {
       presentationBounds.width = mediaAreaWidth;
       presentationBounds.height = mediaAreaHeight;
       presentationBounds.top = DEFAULT_VALUES.navBarHeight;
-      presentationBounds.left = sideBarNavigationBounds.width
-        + sideBarContentBounds.width;
+      presentationBounds.left = sideBarNavWidth + sideBarContentWidth;
     }
 
     return presentationBounds;
@@ -279,32 +288,22 @@ class LayoutManager extends Component {
     const { contextState, contextDispatch } = this.props;
     const { input } = contextState;
     const { ACTIONS } = LayoutContext;
-    const {
-      sideBarNavigationBounds,
-      sideBarContentBounds,
-    } = this.calculatesSideBarSize();
-    const cameraDockBounds = this.calculatesCameraDockBounds(
-      sideBarNavigationBounds, sideBarContentBounds);
-    const presentationBounds = this.calculatesPresentationBounds(
-      sideBarNavigationBounds, sideBarContentBounds,
-      cameraDockBounds);
 
-    contextDispatch({
-      type: ACTIONS.SET_MEDIA_AREA_SIZE,
-      value: {
-        width: windowWidth() - sideBarNavigationBounds.width - sideBarContentBounds.width,
-        height: windowHeight() - DEFAULT_VALUES.navBarHeight - DEFAULT_VALUES.actionBarHeight,
-      }
-    });
+    const sideBarNavWidth = this.calculatesSideBarNavWidth();
+    const sideBarContentWidth = this.calculatesSideBarContentWidth();
+    const cameraDockBounds = this.calculatesCameraDockBounds(sideBarNavWidth, sideBarContentWidth);
+    const sideBarNavHeight = this.calculatesSideBarNavHeight();
+    const sideBarContentHeight = this.calculatesSideBarContentHeight(cameraDockBounds.height);
+    const presentationBounds = this.calculatesPresentationBounds(sideBarNavWidth, sideBarContentWidth, cameraDockBounds);
 
     contextDispatch({
       type: ACTIONS.SET_NAVBAR_OUTPUT,
       value: {
         display: input.navBar.hasNavBar,
-        width: windowWidth() - sideBarNavigationBounds.width - sideBarContentBounds.width,
+        width: windowWidth() - sideBarNavWidth - sideBarContentWidth,
         height: DEFAULT_VALUES.navBarHeight,
         top: DEFAULT_VALUES.navBarTop,
-        left: sideBarNavigationBounds.width + sideBarContentBounds.width,
+        left: sideBarNavWidth + sideBarContentWidth,
         tabOrder: DEFAULT_VALUES.navBarTabOrder,
       }
     });
@@ -313,10 +312,10 @@ class LayoutManager extends Component {
       type: ACTIONS.SET_ACTIONBAR_OUTPUT,
       value: {
         display: input.actionBar.hasActionBar,
-        width: windowWidth() - sideBarNavigationBounds.width - sideBarContentBounds.width,
+        width: windowWidth() - sideBarNavWidth - sideBarContentWidth,
         height: DEFAULT_VALUES.actionBarHeight,
         top: windowHeight() - DEFAULT_VALUES.actionBarHeight,
-        left: sideBarNavigationBounds.width + sideBarContentBounds.width,
+        left: sideBarNavWidth + sideBarContentWidth,
         tabOrder: DEFAULT_VALUES.actionBarTabOrder,
       }
     });
@@ -325,8 +324,8 @@ class LayoutManager extends Component {
       type: ACTIONS.SET_SIDEBAR_NAVIGATION_OUTPUT,
       value: {
         display: input.sideBarNavigation.isOpen,
-        width: sideBarNavigationBounds.width,
-        height: sideBarNavigationBounds.height,
+        width: sideBarNavWidth,
+        height: sideBarNavHeight,
         top: DEFAULT_VALUES.sideBarNavTop,
         left: DEFAULT_VALUES.sideBarNavLeft,
         tabOrder: DEFAULT_VALUES.sideBarNavTabOrder,
@@ -337,12 +336,20 @@ class LayoutManager extends Component {
       type: ACTIONS.SET_SIDEBAR_CONTENT_OUTPUT,
       value: {
         display: input.sideBarContent.isOpen,
-        width: sideBarContentBounds.width,
-        height: sideBarContentBounds.height,
+        width: sideBarContentWidth,
+        height: sideBarContentHeight,
         top: DEFAULT_VALUES.sideBarContentTop,
-        left: sideBarNavigationBounds.width,
+        left: sideBarNavWidth,
         currentPanelType: input.currentPanelType,
         tabOrder: DEFAULT_VALUES.sideBarContentTabOrder,
+      }
+    });
+
+    contextDispatch({
+      type: ACTIONS.SET_MEDIA_AREA_SIZE,
+      value: {
+        width: windowWidth() - sideBarNavWidth - sideBarContentWidth,
+        height: windowHeight() - DEFAULT_VALUES.navBarHeight - DEFAULT_VALUES.actionBarHeight,
       }
     });
 
@@ -370,24 +377,6 @@ class LayoutManager extends Component {
         tabOrder: DEFAULT_VALUES.presentationTabOrder,
       }
     });
-
-    // output: {
-    //   screenShare: {
-    //     display: false,
-    //     width: 0,
-    //     height: 0,
-    //     top: 0,
-    //     left: 0
-    //   },
-    //   externalVideo: {
-    //     display: false,
-    //     width: 0,
-    //     height: 0,
-    //     top: 0,
-    //     left: 0,
-    //     tabOrder: 0
-    //   }
-    // }
   }
 
   render() {
