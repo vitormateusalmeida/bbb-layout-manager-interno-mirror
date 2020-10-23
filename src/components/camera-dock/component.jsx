@@ -3,7 +3,7 @@ import styles from './styles.module.sass';
 import { Resizable } from 're-resizable';
 import LayoutContext from '../Layout/context';
 import DEFAULT_VALUES from '../Layout/layout-manager/defaultValues';
-import { CAMERADOCK_POSITION } from '../Layout/layout-manager/enum';
+import { LAYOUT_TYPE, CAMERADOCK_POSITION } from '../Layout/layout-manager/enum';
 import _ from 'lodash';
 import Draggable from 'react-draggable';
 import DropZone from './drop-zone/component';
@@ -100,6 +100,7 @@ export default class CameraDock extends PureComponent {
 
   render() {
     const {
+      layoutType,
       display,
       maxHeight,
       top,
@@ -122,7 +123,7 @@ export default class CameraDock extends PureComponent {
           onStart={this.handleCameraDockDragStart}
           onStop={this.handleCameraDockDragStop}
           onMouseDown={e => e.preventDefault()}
-          disabled={isResizing}
+          disabled={isResizing || layoutType !== LAYOUT_TYPE.DEFAULT_LAYOUT}
           position={{ x: left, y: top }}
         >
           <Resizable
@@ -133,10 +134,12 @@ export default class CameraDock extends PureComponent {
               height: resizableHeight,
             }}
             enable={{
-              bottom: position === CAMERADOCK_POSITION.CONTENT_TOP || position === CAMERADOCK_POSITION.CONTENT_BOTTOM,
-              right: position === CAMERADOCK_POSITION.CONTENT_LEFT,
-              left: position === CAMERADOCK_POSITION.CONTENT_RIGHT,
-              top: position === CAMERADOCK_POSITION.CONTENT_BOTTOM || position === CAMERADOCK_POSITION.SIDEBAR_CONTENT_BOTTOM,
+              bottom: (position === CAMERADOCK_POSITION.CONTENT_TOP || position === CAMERADOCK_POSITION.CONTENT_BOTTOM)
+                && layoutType !== LAYOUT_TYPE.DEFAULT_LAYOUT,
+              right: position === CAMERADOCK_POSITION.CONTENT_LEFT && layoutType !== LAYOUT_TYPE.DEFAULT_LAYOUT,
+              left: position === CAMERADOCK_POSITION.CONTENT_RIGHT && layoutType !== LAYOUT_TYPE.DEFAULT_LAYOUT,
+              top: (position === CAMERADOCK_POSITION.CONTENT_BOTTOM || position === CAMERADOCK_POSITION.SIDEBAR_CONTENT_BOTTOM)
+                && layoutType !== LAYOUT_TYPE.DEFAULT_LAYOUT,
             }}
             handleWrapperClass="resizecameraDockWrapper"
             onResizeStart={() => {

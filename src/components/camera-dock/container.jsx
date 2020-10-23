@@ -9,7 +9,12 @@ const CameraDockContainer = props => {
 
   if (cameraDock.width === 0) return null;
 
-  return <CameraDock {...cameraDock} position={input.cameraDock.position} contextDispatch={contextDispatch} />
+  return <CameraDock
+    {...cameraDock}
+    layoutType={input.layoutType}
+    position={input.cameraDock.position}
+    contextDispatch={contextDispatch}
+  />
 }
 
 export default LayoutContext.withConsumer(CameraDockContainer);
