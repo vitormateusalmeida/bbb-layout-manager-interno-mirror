@@ -1,12 +1,12 @@
 import React, { Component, Fragment } from 'react';
-import App from '../components/app/component';
+import AppContainer from '../components/app/container';
 import LayoutContext from '../components/Layout/context';
 
 class Base extends Component {
   render() {
     return (
       <Fragment>
-        <App />
+        <AppContainer />
       </Fragment>
     );
   }

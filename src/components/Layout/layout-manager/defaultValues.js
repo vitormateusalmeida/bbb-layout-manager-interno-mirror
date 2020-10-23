@@ -1,3 +1,7 @@
+const LAYOUT_TYPE = {
+  DEFAULT_LAYOUT: 'default',
+}
+
 const CAMERADOCK_POSITION = {
   CONTENT_TOP: 'contentTop',
   CONTENT_RIGHT: 'contentRight',
@@ -7,6 +11,7 @@ const CAMERADOCK_POSITION = {
 }
 
 const DEFAULT_VALUES = {
+  layoutType: LAYOUT_TYPE.DEFAULT_LAYOUT,
   panelType: 'chat',
 
   cameraPosition: 'contentTop',
@@ -40,5 +45,6 @@ const DEFAULT_VALUES = {
 
 export default DEFAULT_VALUES;
 export {
-  CAMERADOCK_POSITION
+  LAYOUT_TYPE,
+  CAMERADOCK_POSITION,
 };

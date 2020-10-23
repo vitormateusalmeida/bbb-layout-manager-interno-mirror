@@ -5,7 +5,9 @@ import logger from 'use-reducer-logger';
 const Context = createContext();
 
 const ACTIONS = {
-  SET_BROWSER_SIZE: 'SET_BROWSER_SIZE',
+  SET_LAYOUT_TYPE: 'setLayoutType',
+
+  SET_BROWSER_SIZE: 'setBrowserSize',
 
   SET_NAVBAR_OUTPUT: 'setNavBarOutput',
 
@@ -42,6 +44,7 @@ const ACTIONS = {
 
 const state = {
   input: {
+    layoutType: DEFAULT_VALUES.layoutType,
     customParameters: {
 
     },
@@ -180,6 +183,16 @@ const state = {
 
 const reducer = (state, action) => {
   switch (action.type) {
+    case ACTIONS.SET_LAYOUT_TYPE: {
+      return {
+        ...state,
+        input: {
+          ...state.input,
+          layoutType: action.value,
+        }
+      };
+    }
+
     case ACTIONS.SET_BROWSER_SIZE: {
       return {
         ...state,

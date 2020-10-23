@@ -1,7 +1,7 @@
 import React, { PureComponent, Fragment } from 'react'
 import styles from './styles.module.sass';
 import LayoutContext from '../../Layout/context';
-import { CAMERADOCK_POSITION } from '../../Layout/layout-manager/defaultValues';
+import { CAMERADOCK_POSITION } from '../../Layout/layout-manager/enum';
 
 const DROP_ZONE_DEFAUL_SIZE = 100;
 

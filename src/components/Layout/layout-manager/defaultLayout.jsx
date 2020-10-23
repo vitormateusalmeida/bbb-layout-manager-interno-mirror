@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import LayoutContext from '../context';
-import DEFAULT_VALUES, { CAMERADOCK_POSITION } from './defaultValues';
+import DEFAULT_VALUES from './defaultValues';
+import { CAMERADOCK_POSITION } from './enum';
 import _ from 'lodash';
 
 const windowWidth = () => window.document.documentElement.clientWidth;
@@ -10,7 +11,7 @@ const max = (value1, value2) => (value1 >= value2 ? value1 : value2);
 
 const autoArrangeLayout = true;
 
-class LayoutManager extends Component {
+class DefaultLayout extends Component {
   constructor(props) {
     super(props);
 
@@ -386,4 +387,4 @@ class LayoutManager extends Component {
   }
 }
 
-export default LayoutContext.withConsumer(LayoutManager);
+export default LayoutContext.withConsumer(DefaultLayout);
