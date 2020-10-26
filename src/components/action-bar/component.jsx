@@ -3,7 +3,7 @@ import styles from './styles.module.sass';
 import Button from '../button/component';
 import LayoutContext from '../Layout/context';
 import DEFAULT_VALUES from '../Layout/layout-manager/defaultValues';
-import { LAYOUT_TYPE, CAMERADOCK_POSITION } from '../Layout/layout-manager/enum';
+import { LAYOUT_TYPE, CAMERADOCK_POSITION } from '../Layout/layout-manager/enums';
 
 export default class ActionBar extends PureComponent {
   setLayoutType(layoutType) {

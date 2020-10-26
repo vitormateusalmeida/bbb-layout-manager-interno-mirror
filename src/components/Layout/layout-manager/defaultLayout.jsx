@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import LayoutContext from '../context';
 import DEFAULT_VALUES from './defaultValues';
-import { CAMERADOCK_POSITION } from './enum';
+import { CAMERADOCK_POSITION } from './enums';
 import _ from 'lodash';
 
 const windowWidth = () => window.document.documentElement.clientWidth;

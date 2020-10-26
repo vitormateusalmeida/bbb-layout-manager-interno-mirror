@@ -5,7 +5,7 @@ import SidebarContentContainer from '../sidebar-content/container';
 import CameraDockContainer from '../camera-dock/container';
 import PresentationContainer from '../presentation/container';
 import ActionBarContainer from '../action-bar/container';
-import { LAYOUT_TYPE } from '../Layout/layout-manager/enum';
+import { LAYOUT_TYPE } from '../Layout/layout-manager/enums';
 import DefaultLayout from '../Layout/layout-manager/defaultLayout';
 import PresentationFocusLayout from '../Layout/layout-manager/presentationFocusLayout';
 import VideoFocusLayout from '../Layout/layout-manager/videoFocusLayout';

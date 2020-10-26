@@ -3,7 +3,7 @@ import styles from './styles.module.sass';
 import { Resizable } from 're-resizable';
 import LayoutContext from '../Layout/context';
 import DEFAULT_VALUES from '../Layout/layout-manager/defaultValues';
-import { LAYOUT_TYPE, CAMERADOCK_POSITION } from '../Layout/layout-manager/enum';
+import { LAYOUT_TYPE, CAMERADOCK_POSITION } from '../Layout/layout-manager/enums';
 import _ from 'lodash';
 import Draggable from 'react-draggable';
 import DropZone from './drop-zone/component';
