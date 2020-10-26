@@ -68,12 +68,13 @@ export default class CameraDock extends PureComponent {
 
   setCameraDockSize(dWidth, dHeight) {
     const { resizeStartHeight, resizeStartWidth } = this.state;
-    const { contextDispatch, position } = this.props;
+    const { contextDispatch, position, layoutType } = this.props;
     const { ACTIONS } = LayoutContext;
 
     if (position === CAMERADOCK_POSITION.CONTENT_TOP
       || position === CAMERADOCK_POSITION.CONTENT_BOTTOM
-      || position === CAMERADOCK_POSITION.SIDEBAR_CONTENT_BOTTOM) {
+      || position === CAMERADOCK_POSITION.SIDEBAR_CONTENT_BOTTOM
+      || layoutType === LAYOUT_TYPE.PRESENTATION_FOCUS) {
       this.setState({ resizableHeight: resizeStartHeight + dHeight });
       contextDispatch({
         type: ACTIONS.SET_CAMERA_DOCK_SIZE,
@@ -84,8 +85,9 @@ export default class CameraDock extends PureComponent {
         }
       });
     }
-    if (position === CAMERADOCK_POSITION.CONTENT_RIGHT
-      || position === CAMERADOCK_POSITION.CONTENT_LEFT) {
+    if ((position === CAMERADOCK_POSITION.CONTENT_RIGHT
+      || position === CAMERADOCK_POSITION.CONTENT_LEFT)
+      && layoutType === LAYOUT_TYPE.DEFAULT_LAYOUT) {
       this.setState({ resizableWidth: resizeStartWidth + dWidth });
       contextDispatch({
         type: ACTIONS.SET_CAMERA_DOCK_SIZE,
@@ -134,12 +136,11 @@ export default class CameraDock extends PureComponent {
               height: resizableHeight,
             }}
             enable={{
-              bottom: (position === CAMERADOCK_POSITION.CONTENT_TOP || position === CAMERADOCK_POSITION.CONTENT_BOTTOM)
-                && layoutType !== LAYOUT_TYPE.DEFAULT_LAYOUT,
-              right: position === CAMERADOCK_POSITION.CONTENT_LEFT && layoutType !== LAYOUT_TYPE.DEFAULT_LAYOUT,
-              left: position === CAMERADOCK_POSITION.CONTENT_RIGHT && layoutType !== LAYOUT_TYPE.DEFAULT_LAYOUT,
-              top: (position === CAMERADOCK_POSITION.CONTENT_BOTTOM || position === CAMERADOCK_POSITION.SIDEBAR_CONTENT_BOTTOM)
-                && layoutType !== LAYOUT_TYPE.DEFAULT_LAYOUT,
+              bottom: position === CAMERADOCK_POSITION.CONTENT_TOP && layoutType === LAYOUT_TYPE.DEFAULT_LAYOUT,
+              right: position === CAMERADOCK_POSITION.CONTENT_LEFT && layoutType === LAYOUT_TYPE.DEFAULT_LAYOUT,
+              left: position === CAMERADOCK_POSITION.CONTENT_RIGHT && layoutType === LAYOUT_TYPE.DEFAULT_LAYOUT,
+              top: ((position === CAMERADOCK_POSITION.CONTENT_BOTTOM || position === CAMERADOCK_POSITION.SIDEBAR_CONTENT_BOTTOM)
+                && layoutType === LAYOUT_TYPE.DEFAULT_LAYOUT) || layoutType === LAYOUT_TYPE.PRESENTATION_FOCUS,
             }}
             handleWrapperClass="resizecameraDockWrapper"
             onResizeStart={() => {
@@ -173,7 +174,9 @@ export default class CameraDock extends PureComponent {
                   ? 0.5
                   : undefined,
               }}
-            ></div>
+            >
+              Camera Dock
+            </div>
           </Resizable>
         </Draggable>
       </Fragment>

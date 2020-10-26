@@ -4,7 +4,7 @@ import { Resizable } from 're-resizable';
 import LayoutContext from '../Layout/context';
 import DEFAULT_VALUES from '../Layout/layout-manager/defaultValues';
 
-export default class SideBarNavigation extends PureComponent {
+export default class SidebarNavigation extends PureComponent {
   constructor(props) {
     super(props);
 
@@ -23,7 +23,7 @@ export default class SideBarNavigation extends PureComponent {
     }
   }
 
-  setSideBarNavWidth(dWidth, dHeight) {
+  setSidebarNavWidth(dWidth, dHeight) {
     const { resizableWidth, resizeStartWidth } = this.state;
     const { contextDispatch } = this.props;
     const { ACTIONS } = LayoutContext;
@@ -50,8 +50,8 @@ export default class SideBarNavigation extends PureComponent {
     const { resizableWidth, resizableHeight } = this.state;
     return (
       <Resizable
-        minWidth={DEFAULT_VALUES.sideBarNavMinWidth}
-        maxWidth={DEFAULT_VALUES.sideBarNavMaxWidth}
+        minWidth={DEFAULT_VALUES.sidebarNavMinWidth}
+        maxWidth={DEFAULT_VALUES.sidebarNavMaxWidth}
         size={{
           width: resizableWidth,
           height: resizableHeight,
@@ -59,11 +59,11 @@ export default class SideBarNavigation extends PureComponent {
         enable={{
           right: true
         }}
-        handleWrapperClass="resizeSideBarNavWrapper"
+        handleWrapperClass="resizeSidebarNavWrapper"
         onResizeStart={() => {
           this.setState({isResizing: true, resizeStartWidth: resizableWidth});
         }}
-        onResize={(e, direction, ref, d) => this.setSideBarNavWidth(d.width, d.height)}
+        onResize={(e, direction, ref, d) => this.setSidebarNavWidth(d.width, d.height)}
         onResizeStop={(e, direction, ref, d) => {
           this.setState({isResizing:false, resizeStartWidth: 0});
         }}
@@ -81,7 +81,9 @@ export default class SideBarNavigation extends PureComponent {
             width: '100%',
             height: '100%',
           }}
-        ></div>
+        >
+          Sidebar Navigation
+        </div>
       </Resizable>
     );
   }

@@ -13,14 +13,14 @@ const ACTIONS = {
 
   SET_ACTIONBAR_OUTPUT: 'setActionBarOutput',
 
-  SET_SIDEBAR_NAVIGATION_IS_OPEN: 'setSideBarNavigationIsOpen',
-  SET_SIDEBAR_NAVIGATION_SIZE: 'setSideBarNavigationSize',
-  SET_SIDEBAR_NAVIGATION_OUTPUT: 'setSideBarNavigationOutput',
+  SET_SIDEBAR_NAVIGATION_IS_OPEN: 'setSidebarNavigationIsOpen',
+  SET_SIDEBAR_NAVIGATION_SIZE: 'setSidebarNavigationSize',
+  SET_SIDEBAR_NAVIGATION_OUTPUT: 'setSidebarNavigationOutput',
 
-  SET_SIDEBAR_CONTENT_IS_OPEN: 'setSideBarContentIsOpen',
-  SET_SIDEBAR_CONTENT_SIZE: 'setSideBarContentSize',
-  SET_SIDEBAR_CONTENT_PANEL_TYPE: 'setSideBarContentPanelType',
-  SET_SIDEBAR_CONTENT_OUTPUT: 'setSideBarContentOutput',
+  SET_SIDEBAR_CONTENT_IS_OPEN: 'setSidebarContentIsOpen',
+  SET_SIDEBAR_CONTENT_SIZE: 'setSidebarContentSize',
+  SET_SIDEBAR_CONTENT_PANEL_TYPE: 'setSidebarContentPanelType',
+  SET_SIDEBAR_CONTENT_OUTPUT: 'setSidebarContentOutput',
 
   SET_MEDIA_AREA_SIZE: 'setMediaAreaSize',
 
@@ -60,13 +60,13 @@ const state = {
       hasActionBar: true,
       height: DEFAULT_VALUES.actionBarHeight,
     },
-    sideBarNavigation: {
+    sidebarNavigation: {
       isOpen: true,
       width: 0,
       height: 0,
       browserWidth: 0
     },
-    sideBarContent: {
+    sidebarContent: {
       isOpen: true,
       currentPanelType: DEFAULT_VALUES.panelType,
       width: 0,
@@ -125,7 +125,7 @@ const state = {
       left: 0,
       tabOrder: 0
     },
-    sideBarNavigation: {
+    sidebarNavigation: {
       display: true,
       width: 0,
       height: 0,
@@ -133,7 +133,7 @@ const state = {
       left: 0,
       tabOrder: 0
     },
-    sideBarContent: {
+    sidebarContent: {
       display: true,
       width: 0,
       height: 0,
@@ -184,6 +184,9 @@ const state = {
 const reducer = (state, action) => {
   switch (action.type) {
     case ACTIONS.SET_LAYOUT_TYPE: {
+      if (state.input.layoutType === action.value) {
+        return state;
+      }
       return {
         ...state,
         input: {
@@ -194,6 +197,10 @@ const reducer = (state, action) => {
     }
 
     case ACTIONS.SET_BROWSER_SIZE: {
+      if (state.input.browser.width === action.value.width
+        && state.input.browser.height === action.value.height) {
+        return state;
+      }
       return {
         ...state,
         input: {
@@ -207,6 +214,14 @@ const reducer = (state, action) => {
     }
 
     case ACTIONS.SET_NAVBAR_OUTPUT: {
+      if (state.output.navBar.display === action.value.display
+        && state.output.navBar.width === action.value.width
+        && state.output.navBar.height === action.value.height
+        && state.output.navBar.top === action.value.top
+        && state.output.navBar.left === action.value.left
+        && state.output.navBar.tabOrder === action.value.tabOrder) {
+        return state;
+      }
       return {
         ...state,
         output: {
@@ -224,6 +239,14 @@ const reducer = (state, action) => {
     }
 
     case ACTIONS.SET_ACTIONBAR_OUTPUT: {
+      if (state.output.actionBar.display === action.value.display
+        && state.output.actionBar.width === action.value.width
+        && state.output.actionBar.height === action.value.height
+        && state.output.actionBar.top === action.value.top
+        && state.output.actionBar.left === action.value.left
+        && state.output.actionBar.tabOrder === action.value.tabOrder) {
+        return state;
+      }
       return {
         ...state,
         output: {
@@ -241,24 +264,31 @@ const reducer = (state, action) => {
     }
 
     case ACTIONS.SET_SIDEBAR_NAVIGATION_IS_OPEN: {
+      if (state.input.sidebarNavigation.isOpen === action.value) {
+        return state;
+      }
       return {
         ...state,
         input: {
           ...state.input,
-          sideBarNavigation: {
-            ...state.input.sideBarNavigation,
+          sidebarNavigation: {
+            ...state.input.sidebarNavigation,
             isOpen: action.value,
           }
         }
       };
     }
     case ACTIONS.SET_SIDEBAR_NAVIGATION_SIZE: {
+      if (state.input.sidebarNavigation.width === action.value.width
+        && state.input.sidebarNavigation.browserWidth === action.value.browserWidth) {
+        return state;
+      }
       return {
         ...state,
         input: {
           ...state.input,
-          sideBarNavigation: {
-            ...state.input.sideBarNavigation,
+          sidebarNavigation: {
+            ...state.input.sidebarNavigation,
             width: action.value.width,
             browserWidth: action.value.browserWidth,
           }
@@ -266,11 +296,19 @@ const reducer = (state, action) => {
       };
     }
     case ACTIONS.SET_SIDEBAR_NAVIGATION_OUTPUT: {
+      if (state.output.sidebarNavigation.display === action.value.display
+        && state.output.sidebarNavigation.width === action.value.width
+        && state.output.sidebarNavigation.height === action.value.height
+        && state.output.sidebarNavigation.top === action.value.top
+        && state.output.sidebarNavigation.left === action.value.left
+        && state.output.sidebarNavigation.tabOrder === action.value.tabOrder) {
+        return state;
+      }
       return {
         ...state,
         output: {
           ...state.output,
-          sideBarNavigation: {
+          sidebarNavigation: {
             display: action.value.display,
             width: action.value.width,
             height: action.value.height,
@@ -284,24 +322,31 @@ const reducer = (state, action) => {
 
 
     case ACTIONS.SET_SIDEBAR_CONTENT_IS_OPEN: {
+      if (state.input.sidebarContent.isOpen === action.value) {
+        return state;
+      }
       return {
         ...state,
         input: {
           ...state.input,
-          sideBarContent: {
-            ...state.input.sideBarContent,
+          sidebarContent: {
+            ...state.input.sidebarContent,
             isOpen: action.value,
           }
         }
       };
     }
     case ACTIONS.SET_SIDEBAR_CONTENT_SIZE: {
+      if (state.input.sidebarContent.width === action.value.width
+        && state.input.sidebarContent.browserWidth === action.value.browserWidth) {
+        return state;
+      }
       return {
         ...state,
         input: {
           ...state.input,
-          sideBarContent: {
-            ...state.input.sideBarContent,
+          sidebarContent: {
+            ...state.input.sidebarContent,
             width: action.value.width,
             browserWidth: action.value.browserWidth,
           }
@@ -309,11 +354,19 @@ const reducer = (state, action) => {
       };
     }
     case ACTIONS.SET_SIDEBAR_CONTENT_OUTPUT: {
+      if (state.output.sidebarContent.display === action.value.display
+        && state.output.sidebarContent.width === action.value.width
+        && state.output.sidebarContent.height === action.value.height
+        && state.output.sidebarContent.top === action.value.top
+        && state.output.sidebarContent.left === action.value.left
+        && state.output.sidebarContent.tabOrder === action.value.tabOrder) {
+        return state;
+      }
       return {
         ...state,
         output: {
           ...state.output,
-          sideBarContent: {
+          sidebarContent: {
             display: action.value.display,
             width: action.value.width,
             height: action.value.height,
@@ -327,6 +380,10 @@ const reducer = (state, action) => {
     }
 
     case ACTIONS.SET_MEDIA_AREA_SIZE: {
+      if (state.output.mediaArea.width === action.value.width
+        && state.output.mediaArea.height === action.value.height) {
+        return state;
+      }
       return {
         ...state,
         output: {
@@ -341,6 +398,9 @@ const reducer = (state, action) => {
     }
 
     case ACTIONS.SET_NUM_CAMERAS: {
+      if (state.input.cameraDock.numCameras === action.value) {
+        return state;
+      }
       return {
         ...state,
         input: {
@@ -353,6 +413,9 @@ const reducer = (state, action) => {
       };
     }
     case ACTIONS.SET_CAMERA_DOCK_IS_DRAGGING: {
+      if (state.input.cameraDock.isDragging === action.value) {
+        return state;
+      }
       return {
         ...state,
         input: {
@@ -365,6 +428,9 @@ const reducer = (state, action) => {
       };
     }
     case ACTIONS.SET_CAMERA_DOCK_POSITION: {
+      if (state.input.cameraDock.position === action.value) {
+        return state;
+      }
       return {
         ...state,
         input: {
@@ -377,6 +443,12 @@ const reducer = (state, action) => {
       };
     }
     case ACTIONS.SET_CAMERA_DOCK_SIZE: {
+      if (state.input.cameraDock.width === action.value.width
+        && state.input.cameraDock.height === action.value.height
+        && state.input.cameraDock.browserWidth === action.value.browserWidth
+        && state.input.cameraDock.browserHeight === action.value.browserHeight) {
+        return state;
+      }
       return {
         ...state,
         input: {
@@ -392,6 +464,15 @@ const reducer = (state, action) => {
       };
     }
     case ACTIONS.SET_CAMERA_DOCK_OUTPUT: {
+      if (state.output.cameraDock.display === action.value.display
+        && state.output.cameraDock.width === action.value.width
+        && state.output.cameraDock.height === action.value.height
+        && state.output.cameraDock.maxHeight === action.value.maxHeight
+        && state.output.cameraDock.top === action.value.top
+        && state.output.cameraDock.left === action.value.left
+        && state.output.cameraDock.tabOrder === action.value.tabOrder) {
+        return state;
+      }
       return {
         ...state,
         output: {
@@ -410,6 +491,9 @@ const reducer = (state, action) => {
     }
 
     case ACTIONS.SET_PRESENTATION_IS_OPEN: {
+      if (state.input.presentation.isOpen === action.value) {
+        return state;
+      }
       return {
         ...state,
         input: {
@@ -422,6 +506,10 @@ const reducer = (state, action) => {
       };
     }
     case ACTIONS.SET_PRESENTATION_SLIDE_SIZE: {
+      if (state.input.presentation.slideSize.width === action.value.width
+        && state.input.presentation.slideSize.height === action.value.height) {
+        return state;
+      }
       return {
         ...state,
         input: {
@@ -437,6 +525,12 @@ const reducer = (state, action) => {
       };
     }
     case ACTIONS.SET_PRESENTATION_SIZE: {
+      if (state.input.presentation.width === action.value.width
+        && state.input.presentation.height === action.value.height
+        && state.input.presentation.browserWidth === action.value.browserWidth
+        && state.input.presentation.browserHeight === action.value.browserHeight) {
+        return state;
+      }
       return {
         ...state,
         input: {
@@ -452,6 +546,14 @@ const reducer = (state, action) => {
       };
     }
     case ACTIONS.SET_PRESENTATION_OUTPUT: {
+      if (state.output.presentation.display === action.value.display
+        && state.output.presentation.width === action.value.width
+        && state.output.presentation.height === action.value.height
+        && state.output.presentation.top === action.value.top
+        && state.output.presentation.left === action.value.left
+        && state.output.presentation.tabOrder === action.value.tabOrder) {
+        return state;
+      }
       return {
         ...state,
         output: {
@@ -469,6 +571,9 @@ const reducer = (state, action) => {
     }
 
     case ACTIONS.SET_HAS_SCREEN_SHARE: {
+      if (state.input.screenShare.hasScreenShare === action.value.hasScreenShare) {
+        return state;
+      }
       return {
         ...state,
         input: {
@@ -481,6 +586,12 @@ const reducer = (state, action) => {
       };
     }
     case ACTIONS.SET_SCREEN_SHARE_SIZE: {
+      if (state.input.screenShare.width === action.value.width
+        && state.input.screenShare.height === action.value.height
+        && state.input.screenShare.browserWidth === action.value.browserWidth
+        && state.input.screenShare.browserHeight === action.value.browserHeight) {
+        return state;
+      }
       return {
         ...state,
         input: {
@@ -497,6 +608,9 @@ const reducer = (state, action) => {
     }
 
     case ACTIONS.SET_HAS_EXTERNAL_VIDEO: {
+      if (state.input.externalVideo.hasExternalVideo === action.value) {
+        return state;
+      }
       return {
         ...state,
         input: {
@@ -509,6 +623,12 @@ const reducer = (state, action) => {
       };
     }
     case ACTIONS.SET_EXTERNAL_VIDEO_SIZE: {
+      if (state.input.externalVideo.width === action.value.width
+        && state.input.externalVideo.height === action.value.height
+        && state.input.externalVideo.browserWidth === action.value.browserWidth
+        && state.input.externalVideo.browserHeight === action.value.browserHeight) {
+        return state;
+      }
       return {
         ...state,
         input: {

@@ -22,8 +22,8 @@ class DropZone extends PureComponent {
 
     dropZones.contentLeft = {
       top: output.navBar.height + DROP_ZONE_DEFAUL_SIZE,
-      left: output.sideBarNavigation.width
-        + output.sideBarContent.width,
+      left: output.sidebarNavigation.width
+        + output.sidebarContent.width,
       height: output.mediaArea.height
         - (2 * DROP_ZONE_DEFAUL_SIZE),
       width: DROP_ZONE_DEFAUL_SIZE,
@@ -31,8 +31,8 @@ class DropZone extends PureComponent {
 
     dropZones.contentRight = {
       top: output.navBar.height + DROP_ZONE_DEFAUL_SIZE,
-      left: output.sideBarNavigation.width
-        + output.sideBarContent.width
+      left: output.sidebarNavigation.width
+        + output.sidebarContent.width
         + output.mediaArea.width
         - DROP_ZONE_DEFAUL_SIZE,
       height: output.mediaArea.height
@@ -42,8 +42,8 @@ class DropZone extends PureComponent {
 
     dropZones.contentTop = {
       top: output.navBar.height,
-      left: output.sideBarNavigation.width
-        + output.sideBarContent.width,
+      left: output.sidebarNavigation.width
+        + output.sidebarContent.width,
       width: output.mediaArea.width,
       height: DROP_ZONE_DEFAUL_SIZE,
     }
@@ -52,16 +52,16 @@ class DropZone extends PureComponent {
       top: output.navBar.height
         + output.mediaArea.height
         - DROP_ZONE_DEFAUL_SIZE,
-      left: output.sideBarNavigation.width
-        + output.sideBarContent.width,
+      left: output.sidebarNavigation.width
+        + output.sidebarContent.width,
       width: output.mediaArea.width,
       height: DROP_ZONE_DEFAUL_SIZE
     }
 
-    dropZones.sideBarContentBottom = {
+    dropZones.sidebarContentBottom = {
       top: windowHeight() - DROP_ZONE_DEFAUL_SIZE,
-      left: output.sideBarNavigation.width,
-      width: output.sideBarContent.width,
+      left: output.sidebarNavigation.width,
+      width: output.sidebarContent.width,
       height: DROP_ZONE_DEFAUL_SIZE,
     }
 
@@ -119,11 +119,11 @@ class DropZone extends PureComponent {
         <div
           id={CAMERADOCK_POSITION.SIDEBAR_CONTENT_BOTTOM}
           className={styles.dropZoneArea}
-          style={{ ...dropZones.sideBarContentBottom }}
+          style={{ ...dropZones.sidebarContentBottom }}
         />
         <div
           className={styles.dropZoneBg}
-          style={{ ...dropZones.sideBarContentBottom }}
+          style={{ ...dropZones.sidebarContentBottom }}
         >Drop Here</div>
       </Fragment>
     );

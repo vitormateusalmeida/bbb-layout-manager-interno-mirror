@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import styles from './styles.module.sass';
 
-export default class SideBarContent extends PureComponent {
+export default class SidebarContent extends PureComponent {
   render() {
     const {
       display,
@@ -22,7 +22,9 @@ export default class SideBarContent extends PureComponent {
           left,
           zIndex: 1,
         }}
-      />
+      >
+        Sidebar Content
+      </div>
     );
   }
 }

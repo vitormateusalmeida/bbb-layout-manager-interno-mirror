@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import NavBarContainer from '../nav-bar/container';
-import SideBarNavigationContainer from '../side-bar-navigation/container';
-import SideBarContentContainer from '../side-bar-content/container';
+import SidebarNavigationContainer from '../sidebar-navigation/container';
+import SidebarContentContainer from '../sidebar-content/container';
 import CameraDockContainer from '../camera-dock/container';
 import PresentationContainer from '../presentation/container';
 import ActionBarContainer from '../action-bar/container';
@@ -30,8 +30,8 @@ export default class App extends Component {
       <Fragment>
         {this.renderLayoutManager()}
         <NavBarContainer />
-        <SideBarNavigationContainer />
-        <SideBarContentContainer />
+        <SidebarNavigationContainer />
+        <SidebarContentContainer />
         <CameraDockContainer />
         <PresentationContainer />
         <ActionBarContainer />

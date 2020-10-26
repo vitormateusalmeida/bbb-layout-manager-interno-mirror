@@ -29,18 +29,18 @@ const DEFAULT_VALUES = {
   actionBarHeight: 65,
   actionBarTabOrder: 6,
 
-  sideBarNavMaxWidth: 240,
-  sideBarNavMinWidth: 150,
-  sideBarNavHeight: '100%',
-  sideBarNavTop: 0,
-  sideBarNavLeft: 0,
-  sideBarNavTabOrder: 1,
+  sidebarNavMaxWidth: 240,
+  sidebarNavMinWidth: 150,
+  sidebarNavHeight: '100%',
+  sidebarNavTop: 0,
+  sidebarNavLeft: 0,
+  sidebarNavTabOrder: 1,
 
-  sideBarContentMaxWidth: 350,
-  sideBarContentMinWidth: 150,
-  sideBarContentHeight: '100%',
-  sideBarContentTop: 0,
-  sideBarContentTabOrder: 2,
+  sidebarContentMaxWidth: 350,
+  sidebarContentMinWidth: 150,
+  sidebarContentHeight: '100%',
+  sidebarContentTop: 0,
+  sidebarContentTabOrder: 2,
 }
 
 export default DEFAULT_VALUES;
