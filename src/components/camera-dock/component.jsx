@@ -5,7 +5,7 @@ import LayoutContext from '../Layout/context';
 import DEFAULT_VALUES from '../Layout/layout-manager/defaultValues';
 import { CAMERADOCK_POSITION } from '../Layout/layout-manager/enums';
 import Draggable from 'react-draggable';
-import DropZoneContainer from './drop-zone-areas/container';
+import DropAreaContainer from './drop-areas/container';
 
 export default class CameraDock extends PureComponent {
   constructor(props) {
@@ -114,7 +114,7 @@ export default class CameraDock extends PureComponent {
     } = this.state;
     return (
       <Fragment>
-        { isDragging ? <DropZoneContainer /> : null}
+        { isDragging ? <DropAreaContainer /> : null}
         <Draggable
           handle="#cameraDock"
           bounds="html"

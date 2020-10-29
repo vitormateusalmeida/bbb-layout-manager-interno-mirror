@@ -1,7 +1,7 @@
 import React, { PureComponent, Fragment } from 'react'
 import styles from './styles.module.sass';
 
-class DropZone extends PureComponent {
+class DropArea extends PureComponent {
   render() {
     const { id, style } = this.props;
     return (
@@ -20,4 +20,4 @@ class DropZone extends PureComponent {
   }
 }
 
-export default DropZone;
+export default DropArea;

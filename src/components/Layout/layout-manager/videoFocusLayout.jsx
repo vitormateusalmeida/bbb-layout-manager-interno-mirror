@@ -125,8 +125,6 @@ class VideoFocusLayout extends Component {
   calculatesPresentationBounds(sidebarNavWidth, sidebarContentWidth) {
     const { contextState } = this.props;
     const { input } = contextState;
-    const mediaAreaHeight = windowHeight() - (DEFAULT_VALUES.navBarHeight + DEFAULT_VALUES.actionBarHeight);
-    const mediaAreaWidth = windowWidth() - (sidebarNavWidth + sidebarContentWidth);
     let presentationBounds = {};
     let presentationHeight = 0;
     if (input.presentation.height === 0

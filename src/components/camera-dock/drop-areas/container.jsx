@@ -1,8 +1,8 @@
 import React, { PureComponent, Fragment } from 'react';
 import LayoutContext from '../../Layout/context';
-import DropZone from './component';
+import DropArea from './component';
 
-class DropZoneContainer extends PureComponent {
+class DropAreaContainer extends PureComponent {
   render() {
     const { contextState } = this.props;
     const { output } = contextState;
@@ -13,10 +13,10 @@ class DropZoneContainer extends PureComponent {
         console.log('objectKey', objectKey);
         console.log('index', index);
         console.log('dropZoneAreas[objectKey]', dropZoneAreas[objectKey]);
-        return <DropZone id={objectKey} style={dropZoneAreas[objectKey]} />;
+        return <DropArea id={objectKey} style={dropZoneAreas[objectKey]} />;
       })
     );
   }
 }
 
-export default LayoutContext.withConsumer(DropZoneContainer);
+export default LayoutContext.withConsumer(DropAreaContainer);

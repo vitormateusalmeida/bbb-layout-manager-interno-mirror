@@ -32,7 +32,7 @@ const ACTIONS = {
   SET_CAMERA_DOCK_IS_DRAGGABLE: 'setCameraDockIsDraggable',
   SET_CAMERA_DOCK_IS_RESIZABLE: 'setCameraDockIsResizable',
 
-  SET_DROP_ZONE_AREAS: 'setDropZoneAreas',
+  SET_DROP_AREAS: 'setDropAreas',
 
   SET_PRESENTATION_IS_OPEN: 'setPresentationIsOpen',
   SET_PRESENTATION_SLIDE_SIZE: 'setPresentationSlideSize',
@@ -541,7 +541,7 @@ const reducer = (state, action) => {
       };
     }
 
-    case ACTIONS.SET_DROP_ZONE_AREAS: {
+    case ACTIONS.SET_DROP_AREAS: {
       if (state.output.dropZoneAreas === action.value) {
         return state;
       }

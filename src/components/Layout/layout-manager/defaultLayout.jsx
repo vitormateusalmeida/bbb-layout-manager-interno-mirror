@@ -232,7 +232,7 @@ class DefaultLayout extends Component {
     return cameraDockBounds;
   }
 
-  calculatesDropZoneAreas(sidebarNavWidth, sidebarContentWidth) {
+  calculatesDropAreas(sidebarNavWidth, sidebarContentWidth) {
     const mediaAreaHeight = windowHeight() - (DEFAULT_VALUES.navBarHeight + DEFAULT_VALUES.actionBarHeight);
     const mediaAreaWidth = windowWidth() - (sidebarNavWidth + sidebarContentWidth);
     const DROP_ZONE_DEFAUL_SIZE = 100;
@@ -342,7 +342,7 @@ class DefaultLayout extends Component {
     const sidebarNavWidth = this.calculatesSidebarNavWidth();
     const sidebarContentWidth = this.calculatesSidebarContentWidth();
     const cameraDockBounds = this.calculatesCameraDockBounds(sidebarNavWidth, sidebarContentWidth);
-    const dropZoneAreas = this.calculatesDropZoneAreas(sidebarNavWidth, sidebarContentWidth);
+    const dropZoneAreas = this.calculatesDropAreas(sidebarNavWidth, sidebarContentWidth);
     const sidebarNavHeight = this.calculatesSidebarNavHeight();
     const sidebarContentHeight = this.calculatesSidebarContentHeight(cameraDockBounds.height);
     const presentationBounds = this.calculatesPresentationBounds(sidebarNavWidth, sidebarContentWidth, cameraDockBounds);
@@ -433,7 +433,7 @@ class DefaultLayout extends Component {
     });
 
     contextDispatch({
-      type: ACTIONS.SET_DROP_ZONE_AREAS,
+      type: ACTIONS.SET_DROP_AREAS,
       value: dropZoneAreas,
     });
 
