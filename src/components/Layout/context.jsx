@@ -152,7 +152,10 @@ const state = {
     },
     cameraDock: {
       display: false,
+      minWidth: 0,
       width: 0,
+      maxWidth: 0,
+      minHeight: 0,
       height: 0,
       maxHeight: 0,
       top: 0,
@@ -492,7 +495,10 @@ const reducer = (state, action) => {
           cameraDock: {
             ...state.output.cameraDock,
             display: action.value.display,
+            minWidth: action.value.minWidth,
             width: action.value.width,
+            maxWidth: action.value.maxWidth,
+            minHeight: action.value.minHeight,
             height: action.value.height,
             maxHeight: action.value.maxHeight,
             top: action.value.top,

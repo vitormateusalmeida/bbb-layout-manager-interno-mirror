@@ -2,7 +2,6 @@ import React, { PureComponent, Fragment } from 'react';
 import styles from './styles.module.sass';
 import { Resizable } from 're-resizable';
 import LayoutContext from '../Layout/context';
-import DEFAULT_VALUES from '../Layout/layout-manager/defaultValues';
 import { CAMERADOCK_POSITION } from '../Layout/layout-manager/enums';
 import Draggable from 'react-draggable';
 import DropAreaContainer from './drop-areas/container';
@@ -73,7 +72,6 @@ export default class CameraDock extends PureComponent {
     const { ACTIONS } = LayoutContext;
 
     if (isResizable.top || isResizable.bottom) {
-      this.setState({ resizableHeight: resizeStartHeight + dHeight });
       contextDispatch({
         type: ACTIONS.SET_CAMERA_DOCK_SIZE,
         value: {
@@ -84,7 +82,6 @@ export default class CameraDock extends PureComponent {
       });
     }
     if (isResizable.left || isResizable.right) {
-      this.setState({ resizableWidth: resizeStartWidth + dWidth });
       contextDispatch({
         type: ACTIONS.SET_CAMERA_DOCK_SIZE,
         value: {
@@ -99,6 +96,11 @@ export default class CameraDock extends PureComponent {
   render() {
     const {
       display,
+      minWidth,
+      width,
+      maxWidth,
+      minHeight,
+      height,
       maxHeight,
       top,
       left,
@@ -108,10 +110,9 @@ export default class CameraDock extends PureComponent {
     } = this.props;
     const {
       isResizing,
-      resizableWidth,
-      resizableHeight,
       isDragging
     } = this.state;
+
     return (
       <Fragment>
         { isDragging ? <DropAreaContainer /> : null}
@@ -125,11 +126,13 @@ export default class CameraDock extends PureComponent {
           position={{ x: left, y: top }}
         >
           <Resizable
-            minHeight={DEFAULT_VALUES.cameraDockMinHeight}
+            minWidth={minWidth}
+            maxWidth={maxWidth}
+            minHeight={minHeight}
             maxHeight={maxHeight}
             size={{
-              width: resizableWidth,
-              height: resizableHeight,
+              width: width,
+              height: height,
             }}
             enable={{
               top: isResizable.top,
@@ -141,8 +144,8 @@ export default class CameraDock extends PureComponent {
             onResizeStart={() => {
               this.setState({
                 isResizing: true,
-                resizeStartHeight: resizableHeight,
-                resizeStartWidth: resizableWidth,
+                resizeStartWidth: width,
+                resizeStartHeight: height,
               });
             }}
             onResize={(e, direction, ref, d) => this.setCameraDockSize(d.width, d.height)}
@@ -163,8 +166,8 @@ export default class CameraDock extends PureComponent {
               className={styles.cameraDock}
               style={{
                 display: !display ? 'none' : 'flex',
-                width: '100%',
-                height: '100%',
+                width: width,
+                height: height,
                 opacity: isDragging
                   ? 0.5
                   : undefined,

@@ -114,13 +114,8 @@ class DefaultLayout extends Component {
     const { contextState } = this.props;
     const { input } = contextState;
     const mediaAreaHeight = windowHeight() - (DEFAULT_VALUES.navBarHeight + DEFAULT_VALUES.actionBarHeight);
-    let mediaAreaWidth = 0;
-    if (input.sidebarNavigation.isOpen && !input.sidebarContent.isOpen)
-      mediaAreaWidth = windowWidth() - sidebarNavWidth;
-    if (input.sidebarContent.isOpen && !input.sidebarNavigation.isOpen)
-      mediaAreaWidth = windowWidth() - sidebarContentWidth;
-    if (input.sidebarContent.isOpen && input.sidebarNavigation.isOpen)
-      mediaAreaWidth = windowWidth() - (sidebarNavWidth + sidebarContentWidth);
+    const mediaAreaWidth = windowWidth() - (sidebarNavWidth + sidebarContentWidth);
+    
     let cameraDockBounds = {};
 
     if (input.cameraDock.numCameras > 0) {
@@ -146,9 +141,12 @@ class DefaultLayout extends Component {
 
           cameraDockBounds.top = DEFAULT_VALUES.navBarHeight;
           cameraDockBounds.left = cameraDockLeft;
+          cameraDockBounds.minWidth = mediaAreaWidth;
           cameraDockBounds.width = mediaAreaWidth;
+          cameraDockBounds.maxWidth = mediaAreaWidth;
+          cameraDockBounds.minHeight = DEFAULT_VALUES.cameraDockMinHeight;
           cameraDockBounds.height = cameraDockHeight;
-          cameraDockBounds.maxHeight = mediaAreaHeight - DEFAULT_VALUES.cameraDockMinHeight;
+          cameraDockBounds.maxHeight = mediaAreaHeight * 0.8;
           break;
         case CAMERADOCK_POSITION.CONTENT_RIGHT:
           if (input.cameraDock.width === 0) {
@@ -165,7 +163,10 @@ class DefaultLayout extends Component {
           cameraDockBounds.left = input.presentation.isOpen
             ? (sidebarNavWidth + sidebarContentWidth + mediaAreaWidth) - cameraDockWidth
             : sidebarNavWidth + sidebarContentWidth;
+            cameraDockBounds.minWidth = DEFAULT_VALUES.cameraDockMinWidth;
           cameraDockBounds.width = cameraDockWidth;
+          cameraDockBounds.maxWidth = mediaAreaWidth * 0.8;
+          cameraDockBounds.minHeight = DEFAULT_VALUES.cameraDockMinHeight;
           cameraDockBounds.height = mediaAreaHeight;
           cameraDockBounds.maxHeight = mediaAreaHeight;
           break;
@@ -187,9 +188,12 @@ class DefaultLayout extends Component {
 
           cameraDockBounds.top = DEFAULT_VALUES.navBarHeight + mediaAreaHeight - cameraDockHeight;
           cameraDockBounds.left = cameraDockLeft;
+          cameraDockBounds.minWidth = mediaAreaWidth;
           cameraDockBounds.width = mediaAreaWidth;
+          cameraDockBounds.maxWidth = mediaAreaWidth;
+          cameraDockBounds.minHeight = DEFAULT_VALUES.cameraDockMinHeight;
           cameraDockBounds.height = cameraDockHeight;
-          cameraDockBounds.maxHeight = mediaAreaHeight - DEFAULT_VALUES.cameraDockMinHeight;
+          cameraDockBounds.maxHeight = mediaAreaHeight * 0.8;
           break;
         case CAMERADOCK_POSITION.CONTENT_LEFT:
           if (input.cameraDock.width === 0) {
@@ -204,7 +208,10 @@ class DefaultLayout extends Component {
 
           cameraDockBounds.top = DEFAULT_VALUES.navBarHeight;
           cameraDockBounds.left = sidebarNavWidth + sidebarContentWidth;
+          cameraDockBounds.minWidth = DEFAULT_VALUES.cameraDockMinWidth;
           cameraDockBounds.width = cameraDockWidth;
+          cameraDockBounds.maxWidth = mediaAreaWidth * 0.8;
+          cameraDockBounds.minHeight = mediaAreaHeight;
           cameraDockBounds.height = mediaAreaHeight;
           cameraDockBounds.maxHeight = mediaAreaHeight;
           break;
@@ -217,7 +224,10 @@ class DefaultLayout extends Component {
 
           cameraDockBounds.top = windowHeight() - cameraDockHeight;
           cameraDockBounds.left = sidebarNavWidth;
+          cameraDockBounds.minWidth = sidebarContentWidth;
           cameraDockBounds.width = sidebarContentWidth;
+          cameraDockBounds.maxWidth = sidebarContentWidth;
+          cameraDockBounds.minHeight = DEFAULT_VALUES.cameraDockMinHeight;
           cameraDockBounds.height = cameraDockHeight;
           cameraDockBounds.maxHeight = windowHeight() * 0.8;
           break;
@@ -408,9 +418,12 @@ class DefaultLayout extends Component {
       type: ACTIONS.SET_CAMERA_DOCK_OUTPUT,
       value: {
         display: input.cameraDock.numCameras > 0,
+        minWidth: cameraDockBounds.minWidth,
         width: cameraDockBounds.width,
-        maxHeight: cameraDockBounds.maxHeight,
+        maxWidth: cameraDockBounds.maxWidth,
+        minHeight: cameraDockBounds.minHeight,
         height: cameraDockBounds.height,
+        maxHeight: cameraDockBounds.maxHeight,
         top: cameraDockBounds.top,
         left: cameraDockBounds.left,
         tabOrder: 4,
@@ -425,7 +438,8 @@ class DefaultLayout extends Component {
     contextDispatch({
       type: ACTIONS.SET_CAMERA_DOCK_IS_RESIZABLE,
       value: {
-        top: input.cameraDock.position === CAMERADOCK_POSITION.CONTENT_BOTTOM,
+        top: input.cameraDock.position === CAMERADOCK_POSITION.CONTENT_BOTTOM
+          || input.cameraDock.position === CAMERADOCK_POSITION.SIDEBAR_CONTENT_BOTTOM,
         right: input.cameraDock.position === CAMERADOCK_POSITION.CONTENT_LEFT,
         bottom: input.cameraDock.position === CAMERADOCK_POSITION.CONTENT_TOP,
         left: input.cameraDock.position === CAMERADOCK_POSITION.CONTENT_RIGHT,

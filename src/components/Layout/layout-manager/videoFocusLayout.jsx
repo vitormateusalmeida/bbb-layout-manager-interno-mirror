@@ -117,8 +117,12 @@ class VideoFocusLayout extends Component {
     let cameraDockBounds = {};
     cameraDockBounds.top = DEFAULT_VALUES.navBarHeight;
     cameraDockBounds.left = sidebarNavWidth + sidebarContentWidth;
+    cameraDockBounds.minWidth = mediaAreaWidth;
     cameraDockBounds.width = mediaAreaWidth;
+    cameraDockBounds.maxWidth = mediaAreaWidth;
+    cameraDockBounds.minHeight = mediaAreaHeight;
     cameraDockBounds.height = mediaAreaHeight;
+    cameraDockBounds.maxHeight = mediaAreaHeight;
     return cameraDockBounds;
   }
 
@@ -213,9 +217,12 @@ class VideoFocusLayout extends Component {
       type: ACTIONS.SET_CAMERA_DOCK_OUTPUT,
       value: {
         display: input.cameraDock.numCameras > 0,
+        minWidth: cameraDockBounds.minWidth,
         width: cameraDockBounds.width,
-        maxHeight: cameraDockBounds.maxHeight,
+        maxWidth: cameraDockBounds.maxWidth,
+        minHeight: cameraDockBounds.minHeight,
         height: cameraDockBounds.height,
+        maxHeight: cameraDockBounds.maxHeight,
         top: cameraDockBounds.top,
         left: cameraDockBounds.left,
         tabOrder: 4,

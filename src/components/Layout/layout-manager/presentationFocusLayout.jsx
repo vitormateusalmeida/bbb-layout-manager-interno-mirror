@@ -126,7 +126,10 @@ class PresentationFocusLayout extends Component {
       }
       cameraDockBounds.top = windowHeight() - cameraDockHeight;
       cameraDockBounds.left = sidebarNavWidth;
+      cameraDockBounds.minWidth = sidebarContentWidth;
       cameraDockBounds.width = sidebarContentWidth;
+      cameraDockBounds.maxWidth = sidebarContentWidth;
+      cameraDockBounds.minHeight = DEFAULT_VALUES.cameraDockMinHeight;
       cameraDockBounds.height = cameraDockHeight;
       cameraDockBounds.maxHeight = windowHeight() * 0.8;
     } else {
@@ -220,9 +223,12 @@ class PresentationFocusLayout extends Component {
       type: ACTIONS.SET_CAMERA_DOCK_OUTPUT,
       value: {
         display: input.cameraDock.numCameras > 0,
+        minWidth: cameraDockBounds.minWidth,
         width: cameraDockBounds.width,
-        maxHeight: cameraDockBounds.maxHeight,
+        maxWidth: cameraDockBounds.maxWidth,
+        minHeight: cameraDockBounds.minHeight,
         height: cameraDockBounds.height,
+        maxHeight: cameraDockBounds.maxHeight,
         top: cameraDockBounds.top,
         left: cameraDockBounds.left,
         tabOrder: 4,
