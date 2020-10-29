@@ -232,11 +232,60 @@ class DefaultLayout extends Component {
     return cameraDockBounds;
   }
 
+  calculatesDropZoneAreas(sidebarNavWidth, sidebarContentWidth) {
+    const mediaAreaHeight = windowHeight() - (DEFAULT_VALUES.navBarHeight + DEFAULT_VALUES.actionBarHeight);
+    const mediaAreaWidth = windowWidth() - (sidebarNavWidth + sidebarContentWidth);
+    const DROP_ZONE_DEFAUL_SIZE = 100;
+    let dropZones = {};
+
+    dropZones[CAMERADOCK_POSITION.CONTENT_TOP] = {
+      top: DEFAULT_VALUES.navBarHeight,
+      left: sidebarNavWidth
+        + sidebarContentWidth,
+      width: mediaAreaWidth,
+      height: DROP_ZONE_DEFAUL_SIZE,
+    }
+
+    dropZones[CAMERADOCK_POSITION.CONTENT_RIGHT] = {
+      top: DEFAULT_VALUES.navBarHeight + DROP_ZONE_DEFAUL_SIZE,
+      left: windowWidth() - DROP_ZONE_DEFAUL_SIZE,
+      height: mediaAreaHeight
+        - (2 * DROP_ZONE_DEFAUL_SIZE),
+      width: DROP_ZONE_DEFAUL_SIZE,
+    }
+
+    dropZones[CAMERADOCK_POSITION.CONTENT_BOTTOM] = {
+      top: DEFAULT_VALUES.navBarHeight
+        + mediaAreaHeight
+        - DROP_ZONE_DEFAUL_SIZE,
+      left: sidebarNavWidth + sidebarContentWidth,
+      width: mediaAreaWidth,
+      height: DROP_ZONE_DEFAUL_SIZE
+    }
+
+    dropZones[CAMERADOCK_POSITION.CONTENT_LEFT] = {
+      top: DEFAULT_VALUES.navBarHeight + DROP_ZONE_DEFAUL_SIZE,
+      left: sidebarNavWidth + sidebarContentWidth,
+      height: mediaAreaHeight
+        - (2 * DROP_ZONE_DEFAUL_SIZE),
+      width: DROP_ZONE_DEFAUL_SIZE,
+    }
+
+    dropZones[CAMERADOCK_POSITION.SIDEBAR_CONTENT_BOTTOM] = {
+      top: windowHeight() - DROP_ZONE_DEFAUL_SIZE,
+      left: sidebarNavWidth,
+      width: sidebarContentWidth,
+      height: DROP_ZONE_DEFAUL_SIZE,
+    }
+
+    return dropZones;
+  }
+
   calculatesPresentationBounds(sidebarNavWidth, sidebarContentWidth, cameraDockBounds) {
     const { contextState } = this.props;
     const { input } = contextState;
     const mediaAreaHeight = windowHeight() - (DEFAULT_VALUES.navBarHeight + DEFAULT_VALUES.actionBarHeight);
-    const mediaAreaWidth = windowWidth() - (sidebarNavWidth + sidebarContentWidth)
+    const mediaAreaWidth = windowWidth() - (sidebarNavWidth + sidebarContentWidth);
     let presentationBounds = {};
 
     if (input.cameraDock.numCameras > 0 && !input.cameraDock.isDragging) {
@@ -293,6 +342,7 @@ class DefaultLayout extends Component {
     const sidebarNavWidth = this.calculatesSidebarNavWidth();
     const sidebarContentWidth = this.calculatesSidebarContentWidth();
     const cameraDockBounds = this.calculatesCameraDockBounds(sidebarNavWidth, sidebarContentWidth);
+    const dropZoneAreas = this.calculatesDropZoneAreas(sidebarNavWidth, sidebarContentWidth);
     const sidebarNavHeight = this.calculatesSidebarNavHeight();
     const sidebarContentHeight = this.calculatesSidebarContentHeight(cameraDockBounds.height);
     const presentationBounds = this.calculatesPresentationBounds(sidebarNavWidth, sidebarContentWidth, cameraDockBounds);
@@ -365,6 +415,26 @@ class DefaultLayout extends Component {
         left: cameraDockBounds.left,
         tabOrder: 4,
       }
+    });
+
+    contextDispatch({
+      type: ACTIONS.SET_CAMERA_DOCK_IS_DRAGGABLE,
+      value: true,
+    });
+
+    contextDispatch({
+      type: ACTIONS.SET_CAMERA_DOCK_IS_RESIZABLE,
+      value: {
+        top: input.cameraDock.position === CAMERADOCK_POSITION.CONTENT_BOTTOM,
+        right: input.cameraDock.position === CAMERADOCK_POSITION.CONTENT_LEFT,
+        bottom: input.cameraDock.position === CAMERADOCK_POSITION.CONTENT_TOP,
+        left: input.cameraDock.position === CAMERADOCK_POSITION.CONTENT_RIGHT,
+      },
+    });
+
+    contextDispatch({
+      type: ACTIONS.SET_DROP_ZONE_AREAS,
+      value: dropZoneAreas,
     });
 
     contextDispatch({

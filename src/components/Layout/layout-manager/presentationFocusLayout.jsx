@@ -230,6 +230,21 @@ class PresentationFocusLayout extends Component {
     });
 
     contextDispatch({
+      type: ACTIONS.SET_CAMERA_DOCK_IS_DRAGGABLE,
+      value: false,
+    });
+
+    contextDispatch({
+      type: ACTIONS.SET_CAMERA_DOCK_IS_RESIZABLE,
+      value: {
+        top: true,
+        right: false,
+        bottom: false,
+        left: false,
+      },
+    });
+
+    contextDispatch({
       type: ACTIONS.SET_PRESENTATION_OUTPUT,
       value: {
         display: input.presentation.isOpen,

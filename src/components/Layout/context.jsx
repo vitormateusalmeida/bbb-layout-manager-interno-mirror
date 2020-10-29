@@ -29,6 +29,10 @@ const ACTIONS = {
   SET_CAMERA_DOCK_POSITION: 'setCameraDockPosition',
   SET_CAMERA_DOCK_SIZE: 'setCameraDockSize',
   SET_CAMERA_DOCK_OUTPUT: 'setCameraDockOutput',
+  SET_CAMERA_DOCK_IS_DRAGGABLE: 'setCameraDockIsDraggable',
+  SET_CAMERA_DOCK_IS_RESIZABLE: 'setCameraDockIsResizable',
+
+  SET_DROP_ZONE_AREAS: 'setDropZoneAreas',
 
   SET_PRESENTATION_IS_OPEN: 'setPresentationIsOpen',
   SET_PRESENTATION_SLIDE_SIZE: 'setPresentationSlideSize',
@@ -50,7 +54,7 @@ const state = {
     },
     browser: {
       width: 0,
-      height: 0
+      height: 0,
     },
     navBar: {
       hasNavBar: true,
@@ -64,14 +68,14 @@ const state = {
       isOpen: true,
       width: 0,
       height: 0,
-      browserWidth: 0
+      browserWidth: 0,
     },
     sidebarContent: {
       isOpen: true,
       currentPanelType: DEFAULT_VALUES.panelType,
       width: 0,
       height: 0,
-      browserWidth: 0
+      browserWidth: 0,
     },
     cameraDock: {
       numCameras: 1,
@@ -86,26 +90,26 @@ const state = {
       isOpen: true,
       slideSize: {
         width: 0,
-        height: 0
+        height: 0,
       },
       width: 0,
       height: 0,
       browserWidth: 0,
-      browserHeight: 0
+      browserHeight: 0,
     },
     screenShare: {
       hasScreenShare: false,
       width: 0,
       height: 0,
       browserWidth: 0,
-      browserHeight: 0
+      browserHeight: 0,
     },
     externalVideo: {
       hasExternalVideo: false,
       width: 0,
       height: 0,
       browserWidth: 0,
-      browserHeight: 0
+      browserHeight: 0,
     }
   },
   output: {
@@ -115,7 +119,7 @@ const state = {
       height: 0,
       top: 0,
       left: 0,
-      tabOrder: 0
+      tabOrder: 0,
     },
     actionBar: {
       display: true,
@@ -123,7 +127,7 @@ const state = {
       height: 0,
       top: 0,
       left: 0,
-      tabOrder: 0
+      tabOrder: 0,
     },
     sidebarNavigation: {
       display: true,
@@ -131,7 +135,7 @@ const state = {
       height: 0,
       top: 0,
       left: 0,
-      tabOrder: 0
+      tabOrder: 0,
     },
     sidebarContent: {
       display: true,
@@ -153,22 +157,30 @@ const state = {
       maxHeight: 0,
       top: 0,
       left: 0,
-      tabOrder: 0
+      tabOrder: 0,
+      isDraggable: false,
+      isResizable: {
+        top: false,
+        right: false,
+        bottom: false,
+        left: false,
+      },
     },
+    dropZoneAreas: {},
     presentation: {
       display: true,
       width: 0,
       height: 0,
       top: 0,
       left: 0,
-      tabOrder: 0
+      tabOrder: 0,
     },
     screenShare: {
       display: false,
       width: 0,
       height: 0,
       top: 0,
-      left: 0
+      left: 0,
     },
     externalVideo: {
       display: false,
@@ -176,7 +188,7 @@ const state = {
       height: 0,
       top: 0,
       left: 0,
-      tabOrder: 0
+      tabOrder: 0,
     }
   }
 };
@@ -478,6 +490,7 @@ const reducer = (state, action) => {
         output: {
           ...state.output,
           cameraDock: {
+            ...state.output.cameraDock,
             display: action.value.display,
             width: action.value.width,
             height: action.value.height,
@@ -486,6 +499,57 @@ const reducer = (state, action) => {
             left: action.value.left,
             tabOrder: action.value.tabOrder,
           }
+        }
+      };
+    }
+    case ACTIONS.SET_CAMERA_DOCK_IS_DRAGGABLE: {
+      if (state.output.cameraDock.isDraggable === action.value) {
+        return state;
+      }
+      return {
+        ...state,
+        output: {
+          ...state.output,
+          cameraDock: {
+            ...state.output.cameraDock,
+            isDraggable: action.value,
+          }
+        }
+      };
+    }
+    case ACTIONS.SET_CAMERA_DOCK_IS_RESIZABLE: {
+      if (state.output.cameraDock.isResizable.top === action.value.top
+        && state.output.cameraDock.isResizable.right === action.value.right
+        && state.output.cameraDock.isResizable.bottom === action.value.bottom
+        && state.output.cameraDock.isResizable.left === action.value.left) {
+        return state;
+      }
+      return {
+        ...state,
+        output: {
+          ...state.output,
+          cameraDock: {
+            ...state.output.cameraDock,
+            isResizable: {
+              top: action.value.top,
+              right: action.value.right,
+              bottom: action.value.bottom,
+              left: action.value.left,
+            }
+          }
+        }
+      };
+    }
+
+    case ACTIONS.SET_DROP_ZONE_AREAS: {
+      if (state.output.dropZoneAreas === action.value) {
+        return state;
+      }
+      return {
+        ...state,
+        output: {
+          ...state.output,
+          dropZoneAreas: action.value,
         }
       };
     }
