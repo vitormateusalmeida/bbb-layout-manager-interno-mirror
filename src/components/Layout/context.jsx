@@ -1,6 +1,7 @@
 import React, { createContext, useReducer } from 'react';
 import DEFAULT_VALUES from './layout-manager/defaultValues';
 import logger from 'use-reducer-logger';
+import _ from 'lodash';
 
 const Context = createContext();
 
@@ -37,6 +38,7 @@ const ACTIONS = {
   SET_PRESENTATION_IS_OPEN: 'setPresentationIsOpen',
   SET_PRESENTATION_SLIDE_SIZE: 'setPresentationSlideSize',
   SET_PRESENTATION_SIZE: 'setPresentationSize',
+  SET_PRESENTATION_IS_RESIZABLE: 'setPresentationIsResizable',
   SET_PRESENTATION_OUTPUT: 'setPresentationOutput',
 
   SET_HAS_SCREEN_SHARE: 'setHasScreenShare',
@@ -172,11 +174,21 @@ const state = {
     dropZoneAreas: {},
     presentation: {
       display: true,
+      minWidth: 0,
       width: 0,
+      maxWidth: 0,
+      minHeight: 0,
       height: 0,
+      maxHeight: 0,
       top: 0,
       left: 0,
       tabOrder: 0,
+      isResizable: {
+        top: false,
+        right: false,
+        bottom: false,
+        left: false,
+      },
     },
     screenShare: {
       display: false,
@@ -594,6 +606,29 @@ const reducer = (state, action) => {
         }
       };
     }
+    case ACTIONS.SET_PRESENTATION_IS_RESIZABLE: {
+      if (state.output.presentation.isResizable.top === action.value.top
+        && state.output.presentation.isResizable.right === action.value.right
+        && state.output.presentation.isResizable.bottom === action.value.bottom
+        && state.output.presentation.isResizable.left === action.value.left) {
+        return state;
+      }
+      return {
+        ...state,
+        output: {
+          ...state.output,
+          presentation: {
+            ...state.output.presentation,
+            isResizable: {
+              top: action.value.top,
+              right: action.value.right,
+              bottom: action.value.bottom,
+              left: action.value.left,
+            }
+          }
+        }
+      };
+    }
     case ACTIONS.SET_PRESENTATION_SIZE: {
       if (state.input.presentation.width === action.value.width
         && state.input.presentation.height === action.value.height
@@ -616,12 +651,8 @@ const reducer = (state, action) => {
       };
     }
     case ACTIONS.SET_PRESENTATION_OUTPUT: {
-      if (state.output.presentation.display === action.value.display
-        && state.output.presentation.width === action.value.width
-        && state.output.presentation.height === action.value.height
-        && state.output.presentation.top === action.value.top
-        && state.output.presentation.left === action.value.left
-        && state.output.presentation.tabOrder === action.value.tabOrder) {
+      if (_.isEqual(state.output.presentation, action.value)) {
+        console.log('presentation is equal');
         return state;
       }
       return {
@@ -629,9 +660,14 @@ const reducer = (state, action) => {
         output: {
           ...state.output,
           presentation: {
+            ...state.output.presentation,
             display: action.value.display,
+            minWidth: action.value.minWidth,
             width: action.value.width,
+            maxWidth: action.value.maxWidth,
+            minHeight: action.value.minHeight,
             height: action.value.height,
+            maxHeight: action.value.maxHeight,
             top: action.value.top,
             left: action.value.left,
             tabOrder: action.value.tabOrder,

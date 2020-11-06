@@ -452,6 +452,16 @@ class DefaultLayout extends Component {
     });
 
     contextDispatch({
+      type: ACTIONS.SET_PRESENTATION_IS_RESIZABLE,
+      value: {
+        top: input.cameraDock.position === CAMERADOCK_POSITION.SIDEBAR_CONTENT_BOTTOM,
+        right: false,
+        bottom: false,
+        left: false,
+      },
+    });
+
+    contextDispatch({
       type: ACTIONS.SET_PRESENTATION_OUTPUT,
       value: {
         display: input.presentation.isOpen,

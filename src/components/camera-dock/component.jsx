@@ -113,6 +113,9 @@ export default class CameraDock extends PureComponent {
       isDragging
     } = this.state;
 
+    console.log('cameradock isDraggable', isDraggable);
+    console.log('cameradock isResizing', isResizing);
+
     return (
       <Fragment>
         { isDragging ? <DropAreaContainer /> : null}
@@ -158,7 +161,7 @@ export default class CameraDock extends PureComponent {
             }}
             style={{
               position: "absolute",
-              zIndex: 3,
+              zIndex: isDragging ? 4 : undefined,
             }}
           >
             <div
